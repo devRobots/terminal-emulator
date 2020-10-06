@@ -1,0 +1,53 @@
+<!-- 
+ description Emulador de una terminal y varias máquinas en red usando Javascript
+ author Julián Esteban Gutiérrez Posada y Carlos Eduardo Gómez Montoya
+ email jugutier@uniquindio.edu.co carloseg@uniquindio.edu.co
+ licence GNU General Public License  Ver. 3.0 (GNU GPL v3)
+ date Octubre 2020
+ version 1.1
+-->
+<html>
+
+  <!-- Ecabezado de la página Web -->
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <link rel="stylesheet" href="css/style.css" media="all" />
+  </head>
+
+  <!-- Cuerpo de la página Web -->
+  <body onload="procesoInicio();">
+    <center>
+
+      <!-- Titulos -->
+      <h1>Emulador de una Terminal y Varias Máquinas en Red</h1>
+      <h3>Julián E. Gutiérrez P. y Carlos E. Gomez M.</h3>
+
+      <tt><b>Máquinas:</b><div id="maquinas">ventas (192.168.0.14) { jugutier carloseg } compras (192.168.0.23) { anasof martin }</div> </tt>
+
+      <p>
+
+      <!-- Consola de salida -->
+
+      <div id="consola" contenteditable="false" >
+        <div id="textoImprimir">Login: carloseg<p></div>
+        <span id="prompt"></span>carloseg@ventas$ <input id="entrada" type="text" size="100" value=""  onkeypress="procesarEntrada(event);">    
+      </div>
+
+    </center>
+
+    <p>
+    
+    <!-- Licencia del software -->
+    <font size="1"> <br> 
+      <a rel="license" href="https://www.gnu.org/licenses/gpl.html"><img alt="GNU General Public License  Ver. 3.0" style="border-width:0" src="images/gplv3.png" height="22" /></a> 
+      <b>&nbsp;<a href="mailto:jugutier@uniquindio.edu.co">Luisa Fernanda Cotte Sánchez - Yesid Shair Rosas Toro - Cristian Camilo Quiceno Laurente</a></b> 
+      <br> Emulador de una terminal y varias máquinas en red usando Javascript - Versión 1.1 (Oct-2020) 
+      <br> Esta obra está bajo una licencia <a rel="license" href="https://www.gnu.org/licenses/gpl.html">GNU General Public License  Ver. 3.0</a>.
+    </font>
+  </body>
+
+  <!--  <script src= "scripts/datosJSON.js"></script> -->
+  <script src= "scripts/emulador.js"></script>
+
+</html>
