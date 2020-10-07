@@ -8,46 +8,89 @@
 -->
 <html>
 
-  <!-- Ecabezado de la página Web -->
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
-    <link rel="stylesheet" href="css/style.css" media="all" />
-  </head>
+<!-- Ecabezado de la página Web -->
 
-  <!-- Cuerpo de la página Web -->
-  <body onload="procesoInicio();">
-    <center>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/style.css" media="all" />
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+    integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+    integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+    crossorigin="anonymous"></script>
+</head>
 
-      <!-- Titulos -->
-      <h1>Emulador de una Terminal y Varias Máquinas en Red</h1>
-      <h3>Julián E. Gutiérrez P. y Carlos E. Gomez M.</h3>
+<!-- Cuerpo de la página Web -->
 
-      <tt><b>Máquinas:</b><div id="maquinas">ventas (192.168.0.14) { jugutier carloseg } compras (192.168.0.23) { anasof martin }</div> </tt>
+<body onload="procesoInicio();">
 
-      <p>
+  <!-- Titulos -->
+  <nav class="navbar navbar-default bg-dark text-white justify-content-center">
+    <h4 class="navbar-text font-weight-bold">
+      Emulador de una Terminal y Varias Máquinas en Red
+    </h4>
+  </nav>
 
-      <!-- Consola de salida -->
 
-      <div id="consola" contenteditable="false" >
-        <div id="textoImprimir">Login: carloseg<p></div>
-        <span id="prompt"></span>carloseg@ventas$ <input id="entrada" type="text" size="100" value=""  onkeypress="procesarEntrada(event);">    
+  <!-- Consola de salida -->
+  <main role="main" class="container">
+    <div class="row align-items-center row-cols-1">
+      <div class="column flex-column">
+        <br>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+          <h4 class="alert-heading">Máquinas:</h4>
+          <p>
+            ventas (192.168.0.14) { jugutier carloseg } compras (192.168.0.23) { anasof martin }
+          </p>
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <br>
+        <div id="consola" contenteditable="false">
+          <div id="textoImprimir">
+            Login: carloseg
+          </div>
+          <span id="prompt"></span>carloseg@ventas$ <input id="entrada" type="text" size="100" value=""
+            onkeypress="procesarEntrada(event);">
+        </div>
       </div>
+    </div>
+  </main>
+  <br>
+  <br>
 
-    </center>
+  <p>
 
-    <p>
-    
     <!-- Licencia del software -->
-    <font size="1"> <br> 
-      <a rel="license" href="https://www.gnu.org/licenses/gpl.html"><img alt="GNU General Public License  Ver. 3.0" style="border-width:0" src="images/gplv3.png" height="22" /></a> 
-      <b>&nbsp;<a href="mailto:jugutier@uniquindio.edu.co">Luisa Fernanda Cotte Sánchez - Yesid Shair Rosas Toro - Cristian Camilo Quiceno Laurente</a></b> 
-      <br> Emulador de una terminal y varias máquinas en red usando Javascript - Versión 1.1 (Oct-2020) 
-      <br> Esta obra está bajo una licencia <a rel="license" href="https://www.gnu.org/licenses/gpl.html">GNU General Public License  Ver. 3.0</a>.
-    </font>
-  </body>
+  <footer class="page-footer bg-dark text-white fixed-bottom">
+    <div class="container-fluid text-md-left">
+      <center>
+        <font size="1"> <br>
+          <a rel="license" href="https://www.gnu.org/licenses/gpl.html"><img alt="GNU General Public License  Ver. 3.0"
+              style="border-width:0" src="images/gplv3.png" height="22" /></a>
+          <b>&nbsp;<a href="mailto:jugutier@uniquindio.edu.co">Luisa Fernanda Cotte Sánchez - Yesid Shair Rosas Toro -
+              Cristian Camilo Quiceno Laurente</a></b>
+          <br> Emulador de una terminal y varias máquinas en red usando Javascript - Versión 2.0
+          <br> Esta obra está bajo una licencia <a rel="license" href="https://www.gnu.org/licenses/gpl.html">GNU
+            General
+            Public License Ver. 3.0</a>.
+          <br>
+          <br>
+        </font>
+      </center>
+    </div>
+  </footer>
+</body>
 
-  <!--  <script src= "scripts/datosJSON.js"></script> -->
-  <script src= "scripts/emulador.js"></script>
+<!--  <script src= "scripts/datosJSON.js"></script> -->
+<script src="scripts/emulador.js"></script>
 
 </html>
