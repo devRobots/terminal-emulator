@@ -54,12 +54,14 @@
           </button>
         </div>
         <br>
-        <div id="consola" contenteditable="false">
+        <div id="consola" onclick="darFoco()" contenteditable="false">
           <div id="textoImprimir">
-            Login: carloseg
+            Login: carloseg <br>
           </div>
-          <span id="prompt"></span>carloseg@ventas$ <input id="entrada" type="text" size="100" value=""
-            onkeypress="procesarEntrada(event);">
+          <span id="prompt" style="font-weight: bold;">
+            carloseg@ventas$
+          </span>
+          <input id="entrada" type="text" size="100" value="" onkeypress="procesarEntrada(event);">
         </div>
       </div>
     </div>

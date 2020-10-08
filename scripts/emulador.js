@@ -11,16 +11,13 @@
  * Lee el archivo computadores.json y lo guarda en la variable computadores
  */
 var computadores = []
-async function obtenerComputadores() {
-    const response = await fetch("scripts/computadores.json");
-    computadores = await response.json();
-}
 
 /**
  * Variables de usuario y computador que se muestran en consola
  */
 var usuario = "luisa"
 var hostname = "PC1"
+var prompt = usuario + "@" + hostname + "$ "
 var computador = null
 
 /**
@@ -30,7 +27,7 @@ var computador = null
 function obtenerComputador(nombre) {
     for (const i in computadores) {
         if (computadores.hasOwnProperty(i)) {
-            const pc = computadores[i];
+            const pc = computadores[i]
             if (pc.hostname == nombre) {
                 return pc
             }
@@ -44,9 +41,14 @@ function obtenerComputador(nombre) {
  * @param texto Texto que se desea adicionar al final de la consola.
  */
 function addConsola(texto) {
-    document.getElementById("textoImprimir").innerHTML += texto + "<br>";
-    var consola = document.getElementById("consola");
-    consola.scrollTop = consola.scrollHeight;
+    document.getElementById("textoImprimir").innerHTML += texto + "<br>"
+    var consola = document.getElementById("consola")
+    consola.scrollTop = consola.scrollHeight
+}
+
+function mostrarPrompt() {
+    prompt = usuario + "@" + hostname + "$ "
+    document.getElementById("prompt").innerHTML = prompt
 }
 
 
@@ -54,9 +56,15 @@ function addConsola(texto) {
  * Proceso de inicio de la terminal
  */
 async function procesoInicio() {
-    await obtenerComputadores()
+    mostrarPrompt()
+    const response = await fetch("scripts/computadores.json")
+    computadores = await response.json()
     computador = obtenerComputador(hostname)
-    entrada.focus();
+    darFoco
+}
+
+function darFoco() {
+    entrada.focus()
 }
 
 
@@ -65,7 +73,7 @@ async function procesoInicio() {
  */
 function procesarEntrada(e) {
     if (e.keyCode == 13) {
-        procesarComando(document.getElementById("entrada"));
+        procesarComando(document.getElementById("entrada"))
     }
 }
 
@@ -74,41 +82,41 @@ function procesarEntrada(e) {
  * @param comando a procesar
  */
 function procesarComando(entrada_) {
-    var entrada = entrada_.value.split(" ");
+    var entrada = entrada_.value.split(" ")
 
     var comando = entrada[0]
     var parametros = []
     for (const i in entrada) {
         if (entrada.hasOwnProperty(i) && i > 0) {
-            const element = entrada[i];
+            const element = entrada[i]
             parametros.push(element)
         }
     }
 
-    var prompt = usuario + "@" + hostname + "$ "
-    addConsola(prompt);
+    addConsola(prompt + entrada_.value, false)
 
     switch (comando) {
         case 'clear':
-            comandoClear(parametros);
-            break;
+            comandoClear(parametros)
+            break
         case 'sudo':
             sudo(parametros)
-            break;
+            break
         case 'ls':
-            ls(parametros);
-            break;
+            ls(parametros)
+            break
         case 'cat':
             cat(parametros)
-            break;
+            break
+
         // ...
 
         default:
-            addConsola("uqsh: comando no reconocido: " + comando);
+            addConsola("uqsh: comando no reconocido: " + comando)
     }
 
-    addConsola("");
-    document.getElementById("entrada").value = "";
+    mostrarPrompt()
+    document.getElementById("entrada").value = ""
 }
 
 /**
@@ -119,7 +127,7 @@ function comandoClear(comandoParametros) {
         addConsola("clear: No requiere parámetros.")
     } else {
         document.getElementById("textoImprimir").innerHTML = ""
-        document.getElementById("entrada").value = "";
+        document.getElementById("entrada").value = ""
     }
 }
 
@@ -129,20 +137,20 @@ function sudo(parametros) {
         var subparametros = []
         for (const i in parametros) {
             if (parametros.hasOwnProperty(i) && i > 0) {
-                const element = parametros[i];
+                const element = parametros[i]
                 subparametros.push(element)
             }
         }
         switch (comando) {
             case 'sudo':
                 sudo(subparametros)
-                break;
+                break
             case 'chown':
                 chown(subparametros)
-                break;
+                break
             default:
-                addConsola("uqsh: comando no reconocido: " + comando);
-                break;
+                addConsola("uqsh: comando no reconocido: " + comando)
+                break
         }
     } else {
         addConsola("sudo: Se esperaba un comando")
@@ -153,7 +161,7 @@ function verificarUsuario(usuario) {
     const usuarios = computador.usuarios
     for (const i in usuarios) {
         if (usuarios.hasOwnProperty(i)) {
-            const u = usuarios[i];
+            const u = usuarios[i]
             if (u == usuario) {
                 return true
             }
@@ -165,7 +173,7 @@ function obtenerArchivo(archivo) {
     const disco = computador.disco
     for (const i in disco) {
         if (disco.hasOwnProperty(i)) {
-            const a = disco[i];
+            const a = disco[i]
             if (a.nombre == archivo) {
                 return a
             }
@@ -178,7 +186,7 @@ function obtenerGrupo(grupo) {
     const grupos = computador.grupos
     for (const i in grupos) {
         if (grupos.hasOwnProperty(i)) {
-            const g = grupos[i];
+            const g = grupos[i]
             if (g.nombre == grupo) {
                 return g
             }
@@ -198,12 +206,12 @@ function chown(parametros) {
 
         for (const i in parametros) {
             if (parametros.hasOwnProperty(i) && i > 0) {
-                const nombreArchivo = parametros[i];
+                const nombreArchivo = parametros[i]
                 var archivo = obtenerArchivo(nombreArchivo)
 
                 if (archivo != null) {
                     archivo.duenio = duenio
-                    if (grupo != null) {
+                    if (nombreGrupo != null) {
                         archivo.grupo.nombre = grupo
                     }
                 } else {
@@ -238,8 +246,8 @@ function cat(parametros) {
     for (const i in parametros) {
         var archivo = obtenerArchivo(parametros[i])
         if (archivo == null) {
-            addConsola("el archivo " + parametros[i] + " no existe");
-            return false;
+            addConsola("el archivo " + parametros[i] + " no existe")
+            return false
         }
         if (permisoLectura(archivo)) {
             addConsola("Leyendo el contenido del archivo ....")
@@ -260,15 +268,15 @@ function permisoLectura(archivo) {
 
     if (usuario == propietario) {
         if (permisos[1] == "r") {
-            return true;
+            return true
         }
     }
     if (obtenerGrupo(grupo).usuarios.includes(usuario)) {
         if (permisos[4] == "r") {
-            return true;
+            return true
         }
     }
     if (permisos[7] == "r") {
-        return true;
+        return true
     }
 }
