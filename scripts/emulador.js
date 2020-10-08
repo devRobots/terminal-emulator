@@ -95,6 +95,9 @@ function procesarComando(entrada_) {
         case 'sudo':
             sudo(parametros)
             break;
+        case 'ls':
+            ls(parametros);
+            break;
         case 'cat':
             cat(parametros)
             break;
@@ -212,11 +215,20 @@ function chown(parametros) {
     }
 }
 
-function comandoLs(parametros) {
+function ls(parametros) {
 
-    if (parametrs > 0) {
+    const disco = computador.disco
+    console.log(parametros)
 
-
+    if (parametros.length > 0) {
+        for (const i in disco) {
+            addConsola(disco[i].permisos + " " + disco[i].duenio + " " + disco[i].grupo + " " +
+                disco[i].fecha + " " + disco[i].nombre)
+        }
+    } else {
+        for (var i in disco) {
+            addConsola(disco[i].nombre)
+        }
     }
 }
 
@@ -224,37 +236,37 @@ function comandoLs(parametros) {
  * Intenta leer el contenido de un archivo
  * @param {String[]} parametros la lista de archivos
  */
-function cat(parametros){
+function cat(parametros) {
     for (const i in parametros) {
         var archivo = obtenerArchivo(parametros[i])
         if (archivo == null) {
             addConsola("el archivo " + parametros[i] + " no existe");
             return false;
         }
-        if(permisoEscritura(archivo)){
+        if (permisoEscritura(archivo)) {
             addConsola("Leyendo el contenido del archivo ....")
-        }else{
+        } else {
             addConsola("no cuenta con permisos")
         }
     }
 }
 
-function permisoEscritura(archivo){
+function permisoEscritura(archivo) {
     var permisos = archivo.permisos
     var propietario = archivo.duenio
     var grupo = archivo.grupo //agregar en el jason
 
-    if(usuario == propietario){
-        if(permisos[2]== "r"){
+    if (usuario == propietario) {
+        if (permisos[2] == "r") {
             return true;
         }
     }
-    if(obtenerGrupo(grupo).usuarios.includes(usuario)){
-        if(permisos[5]== "r"){
+    if (obtenerGrupo(grupo).usuarios.includes(usuario)) {
+        if (permisos[5] == "r") {
             return true;
         }
     }
-    if(permisos[8] == "r"){
+    if (permisos[8] == "r") {
         return true;
     }
 }
