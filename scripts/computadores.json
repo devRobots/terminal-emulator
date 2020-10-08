@@ -5,45 +5,182 @@
         "disco": [
             {
                 "nombre": "ensayo.txt",
-                "duenio": "lu",
+                "duenio": "luisa",
                 "fecha": "20/05/2018 22:54:00",
                 "permisos": "--rw-r----"
             },
             {
-                "nombre": "ensayo.txt",
-                "duenio": "lu",
-                "fecha": "20/05/2018 22:54:00",
+                "nombre": "grafica.jpg",
+                "duenio": "joshua",
+                "fecha": "04/07/2018 22:54:00",
                 "permisos": "--rw-r----"
             },
             {
-                "nombre": "ensayo.txt",
-                "duenio": "lu",
-                "fecha": "20/05/2018 22:54:00",
+                "nombre": "parcial.pdf",
+                "duenio": "yesid",
+                "fecha": "02/02/2019 22:54:00",
                 "permisos": "--rw-r----"
             },
             {
-                "nombre": "ensayo.txt",
-                "duenio": "lu",
-                "fecha": "20/05/2018 22:54:00",
+                "nombre": "hojadevida.pdf",
+                "duenio": "cristian",
+                "fecha": "31/08/2019 22:54:00",
                 "permisos": "--rw-r----"
             }
         ],
         "usuarios": [
-            "lu",
+            "luisa",
             "joshua",
             "yes",
-            "carlos",
+            "cristian",
             "root"
         ],
         "grupos": [
-            "lu",
+            "luisa",
             "joshua",
-            "yes",
-            "carlos",
+            "yesid",
+            "cristian",
             "ventas",
             "amigos",
             "root"
         ]
     },
-    {}
+    {
+        "hostname": "PC2",
+        "IP": "192.168.0.33",
+        "disco": [
+            {
+                "nombre": "entrega1.doc",
+                "duenio": "carlos",
+                "fecha": "13/09/2019 22:54:00",
+                "permisos": "--rw-r----"
+            },
+            {
+                "nombre": "fotocedula.png",
+                "duenio": "julian",
+                "fecha": "03/03/2020 22:54:00",
+                "permisos": "--rw-r----"
+            },
+            {
+                "nombre": "correccion.txt",
+                "duenio": "andres",
+                "fecha": "11/25/2019 22:54:00",
+                "permisos": "--rw-r----"
+            },
+            {
+                "nombre": "proyecto.zip",
+                "duenio": "claudia",
+                "fecha": "31/08/2019 22:54:00",
+                "permisos": "--rw-r----"
+            }
+        ],
+        "usuarios": [
+            "carlos",
+            "julian",
+            "andres",
+            "claudia",
+            "root"
+        ],
+        "grupos": [
+            "carlos",
+            "julian",
+            "andres",
+            "claudia",
+            "profesores",
+            "supervisores",
+            "root"
+        ]
+    },
+    {
+        "hostname": "PC3",
+        "IP": "192.168.0.34",
+        "disco": [
+            {
+                "nombre": "formularios.doc",
+                "duenio": "lina",
+                "fecha": "18/12/2019 22:54:00",
+                "permisos": "--rw-r----"
+            },
+            {
+                "nombre": "presentacion.pdf",
+                "duenio": "juan",
+                "fecha": "24/06/2020 22:54:00",
+                "permisos": "--rw-r----"
+            },
+            {
+                "nombre": "seguimiento4.txt",
+                "duenio": "stefania",
+                "fecha": "09/25/2020 22:54:00",
+                "permisos": "--rw-r----"
+            },
+            {
+                "nombre": "modelo.pdf",
+                "duenio": "angelica",
+                "fecha": "01/10/2020 22:54:00",
+                "permisos": "--rw-r----"
+            }
+        ],
+        "usuarios": [
+            "lina",
+            "juan",
+            "stefania",
+            "angelica",
+            "root"
+        ],
+        "grupos": [
+            "lina",
+            "juan",
+            "stefania",
+            "angelica",
+            "seguimientos",
+            "amigos",
+            "root"
+        ]
+    },
+    {
+        "hostname": "PC4",
+        "IP": "192.168.0.35",
+        "disco": [
+            {
+                "nombre": "finalproject.zip",
+                "duenio": "camilo",
+                "fecha": "11/03/2018 22:54:00",
+                "permisos": "--rw-r----"
+            },
+            {
+                "nombre": "disenio.png",
+                "duenio": "miguel",
+                "fecha": "21/11/2020 22:54:00",
+                "permisos": "--rw-r----"
+            },
+            {
+                "nombre": "requisitos.txt",
+                "duenio": "mario",
+                "fecha": "19/12/2019 22:54:00",
+                "permisos": "--rw-r----"
+            },
+            {
+                "nombre": "diploma.pdf",
+                "duenio": "luis",
+                "fecha": "22/08/2021 22:54:00",
+                "permisos": "--rw-r----"
+            }
+        ],
+        "usuarios": [
+            "camilo",
+            "miguel",
+            "mario",
+            "luis",
+            "root"
+        ],
+        "grupos": [
+            "camilo",
+            "miguel",
+            "mario",
+            "luis",
+            "proyecto",
+            "tesis",
+            "root"
+        ]
+    }
 ]
