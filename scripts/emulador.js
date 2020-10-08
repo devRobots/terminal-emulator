@@ -116,7 +116,9 @@ function comandoClear(comandoParametros) {
         document.getElementById("entrada").value = "";
     }
 }
+function comandoLs(parametros) {
 
+    if (parametros > 0) {
 
 function sudo(parametros) {
     if (parametros.length > 0) {
