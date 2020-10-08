@@ -181,40 +181,32 @@ function comandoClear(comandoParametros) {
         }
         return null
     }
+    return null
+}
+function chown(parametros) {
+    if (parametros.length > 1) {
+        var dueniogrupo = parametros[0].split(":")
+        var duenio = dueniogrupo[0]
+        var nombreGrupo = null
+        if (dueniogrupo.hasOwnProperty(1)) {
+            nombreGrupo = dueniogrupo[1]
+        }
 
-    function chown(parametros) {
-        switch (parametros.length) {
-            case 0:
-                addConsola("chown: falta un operando")
-                break;
-            case 1:
-                addConsola("chown: falta un operando despues de '" + parametros[0] + "'")
-                break;
-            default:
-                var dueniogrupo = parametros[0].split(":")
-                var duenio = dueniogrupo[0]
-                var grupo = null
-                if (dueniogrupo.hasOwnProperty(i)) {
-                    grupo = dueniogrupo[1]
-                }
+            for (const i in parametros) {
+                if (parametros.hasOwnProperty(i) && i > 0) {
+                    const nombreArchivo = parametros[i];
+                    var archivo = obtenerArchivo(nombreArchivo).duenio
 
-                for (const i in parametros) {
-                    if (parametros.hasOwnProperty(i) && i > 0) {
-                        const nombreArchivo = parametros[i];
-                        var archivo = obtenerArchivo(nombreArchivo).duenio
-
-                        if (archivo != null) {
-                            archivo.duenio = duenio
-                            if (grupo != null) {
-                                archivo.grupo.nombre = grupo
-                            }
-                        } else {
-                            addConsola("chown: no se puede acceder a '" + nombreArchivo + "': No existe el fichero")
+                    if (archivo != null) {
+                        archivo.duenio = duenio
+                        if (grupo != null) {
+                            archivo.grupo.nombre = grupo
                         }
-                        archivos.push(element)
+                    } else {
+                        addConsola("chown: no se puede acceder a '" + nombreArchivo + "': No existe el fichero")
                     }
+                    archivos.push(element)
                 }
-                break;
         }
     }
 
