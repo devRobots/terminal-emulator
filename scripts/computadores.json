@@ -1,0 +1,49 @@
+[
+    {
+        "hostname": "PC1",
+        "IP": "192.168.0.32",
+        "disco": [
+            {
+                "nombre": "ensayo.txt",
+                "duenio": "lu",
+                "fecha": "20/05/2018 22:54:00",
+                "permisos": "--rw-r----"
+            },
+            {
+                "nombre": "ensayo.txt",
+                "duenio": "lu",
+                "fecha": "20/05/2018 22:54:00",
+                "permisos": "--rw-r----"
+            },
+            {
+                "nombre": "ensayo.txt",
+                "duenio": "lu",
+                "fecha": "20/05/2018 22:54:00",
+                "permisos": "--rw-r----"
+            },
+            {
+                "nombre": "ensayo.txt",
+                "duenio": "lu",
+                "fecha": "20/05/2018 22:54:00",
+                "permisos": "--rw-r----"
+            }
+        ],
+        "usuarios": [
+            "lu",
+            "joshua",
+            "yes",
+            "carlos",
+            "root"
+        ],
+        "grupos": [
+            "lu",
+            "joshua",
+            "yes",
+            "carlos",
+            "ventas",
+            "amigos",
+            "root"
+        ]
+    },
+    {}
+]
