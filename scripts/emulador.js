@@ -116,104 +116,113 @@ function comandoClear(comandoParametros) {
         document.getElementById("entrada").value = "";
     }
 }
-function comandoLs(parametros) {
+{
 
-    if (parametros > 0) {
-
-function sudo(parametros) {
-    if (parametros.length > 0) {
-        var comando = parametros[0]
-        var subparametros = []
-        for (const i in parametros) {
-            if (parametros.hasOwnProperty(i) && i > 0) {
-                const element = parametros[i];
-                subparametros.push(element)
-            }
-        }
-        switch (comando) {
-            case 'sudo':
-                sudo(subparametros)
-                break;
-            case 'chown':
-                chown(subparametros)
-                break;
-            default:
-                addConsola("uqsh: comando no reconocido: " + comando);
-                break;
-        }
-    } else {
-        addConsola("sudo: Se esperaba un comando")
-    }
-}
-
-function verificarUsuario(usuario) {
-    const usuarios = computadores.usuarios
-    for (const i in usuarios) {
-        if (usuarios.hasOwnProperty(i)) {
-            const u = usuarios[i];
-            if (u == usuario) {
-                return true
-            }
-        }
-    }
-    return false
-}
-function obtenerArchivo(archivo) {
-    const disco = computadores.disco
-    for (const i in disco) {
-        if (disco.hasOwnProperty(i)) {
-            const a = disco[i];
-            if (a.nombre == archivo) {
-                return a
-            }
-        }
-    }
-    return null
-}
-function obtenerGrupo(grupo) {
-    const grupos = computadores.grupos
-    for (const i in grupos) {
-        if (grupos.hasOwnProperty(i)) {
-            const g = grupos[i];
-            if (g.nombre == grupo) {
-                return g
-            }
-        }
-    }
-    return null
-}
-function chown(parametros) {
-    switch (parametros.length) {
-        case 0:
-            addConsola("chown: falta un operando")
-            break;
-        case 1:
-            addConsola("chown: falta un operando despues de '" + parametros[0] + "'")
-            break;
-        default:
-            var dueniogrupo = parametros[0].split(":")
-            var duenio = dueniogrupo[0]
-            var grupo = null
-            if (dueniogrupo.hasOwnProperty(i)) {
-                grupo = dueniogrupo[1]
-            }
-
+    function sudo(parametros) {
+        if (parametros.length > 0) {
+            var comando = parametros[0]
+            var subparametros = []
             for (const i in parametros) {
                 if (parametros.hasOwnProperty(i) && i > 0) {
-                    const nombreArchivo = parametros[i];
-                    var archivo = obtenerArchivo(nombreArchivo).duenio
-
-                    if (archivo != null) {
-                        archivo.duenio = duenio
-                        if (grupo != null) {
-                            archivo.grupo.nombre = grupo
-                        }
-                    } else {
-                        addConsola("chown: no se puede acceder a '" + nombreArchivo + "': No existe el fichero")
-                    }
-                    archivos.push(element)
+                    const element = parametros[i];
+                    subparametros.push(element)
                 }
             }
-            break;
+            switch (comando) {
+                case 'sudo':
+                    sudo(subparametros)
+                    break;
+                case 'chown':
+                    chown(subparametros)
+                    break;
+                default:
+                    addConsola("uqsh: comando no reconocido: " + comando);
+                    break;
+            }
+        } else {
+            addConsola("sudo: Se esperaba un comando")
+        }
+    }
+
+    function verificarUsuario(usuario) {
+        const usuarios = computadores.usuarios
+        for (const i in usuarios) {
+            if (usuarios.hasOwnProperty(i)) {
+                const u = usuarios[i];
+                if (u == usuario) {
+                    return true
+                }
+            }
+        }
+        return false
+    }
+    function obtenerArchivo(archivo) {
+        const disco = computadores.disco
+        for (const i in disco) {
+            if (disco.hasOwnProperty(i)) {
+                const a = disco[i];
+                if (a.nombre == archivo) {
+                    return a
+                }
+            }
+        }
+        return null
+    }
+
+    function obtenerGrupo(grupo) {
+        const grupos = computadores.grupos
+        for (const i in grupos) {
+            if (grupos.hasOwnProperty(i)) {
+                const g = grupos[i];
+                if (g.nombre == grupo) {
+                    return g
+                }
+            }
+        }
+        return null
+    }
+
+    function chown(parametros) {
+        switch (parametros.length) {
+            case 0:
+                addConsola("chown: falta un operando")
+                break;
+            case 1:
+                addConsola("chown: falta un operando despues de '" + parametros[0] + "'")
+                break;
+            default:
+                var dueniogrupo = parametros[0].split(":")
+                var duenio = dueniogrupo[0]
+                var grupo = null
+                if (dueniogrupo.hasOwnProperty(i)) {
+                    grupo = dueniogrupo[1]
+                }
+
+                for (const i in parametros) {
+                    if (parametros.hasOwnProperty(i) && i > 0) {
+                        const nombreArchivo = parametros[i];
+                        var archivo = obtenerArchivo(nombreArchivo).duenio
+
+                        if (archivo != null) {
+                            archivo.duenio = duenio
+                            if (grupo != null) {
+                                archivo.grupo.nombre = grupo
+                            }
+                        } else {
+                            addConsola("chown: no se puede acceder a '" + nombreArchivo + "': No existe el fichero")
+                        }
+                        archivos.push(element)
+                    }
+                }
+                break;
+        }
+    }
+
+    function comandoLs(parametros) {
+
+        if (parametrs > 0) {
+
+
+        }
     }
 }
