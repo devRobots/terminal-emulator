@@ -36,6 +36,12 @@
             "root"
         ],
         "grupos": [
+            {
+                "nombre": "carlos",
+                "usuarios": [
+                    "carlos"
+                ]
+            },
             "luisa",
             "joshua",
             "yesid",
@@ -82,7 +88,12 @@
             "root"
         ],
         "grupos": [
-            "carlos",
+            {
+                "nombre": "carlos",
+                "usuarios": [
+                    "carlos"
+                ]
+            },
             "julian",
             "andres",
             "claudia",
