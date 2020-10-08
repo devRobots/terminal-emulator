@@ -117,7 +117,6 @@ function comandoClear(comandoParametros) {
     }
 }
 
-
 function sudo(parametros) {
     if (parametros.length > 0) {
         var comando = parametros[0]
@@ -194,7 +193,7 @@ function chown(parametros) {
         for (const i in parametros) {
             if (parametros.hasOwnProperty(i) && i > 0) {
                 const nombreArchivo = parametros[i];
-                var archivo = obtenerArchivo(nombreArchivo).duenio
+                var archivo = obtenerArchivo(nombreArchivo)
 
                 if (archivo != null) {
                     archivo.duenio = duenio
@@ -204,7 +203,6 @@ function chown(parametros) {
                 } else {
                     addConsola("chown: no se puede acceder a '" + nombreArchivo + "': No existe el fichero")
                 }
-                archivos.push(element)
             }
         }
     }
