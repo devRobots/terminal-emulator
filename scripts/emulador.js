@@ -8,29 +8,44 @@
 */
 
 /**
+ * Lee el archivo computadores.json y lo guarda en la variable computadores
+ */
+var computadores = []
+fetch("scripts/computadores.json")
+    .then(response => {
+        return response.json();
+    })
+    .then(data => computadores = data);
+
+/**
+ * Variables de usuario y computador que se muestran en consola
+ */
+var usuario = "lu"
+var computador = "PP"
+
+/**
  * Borra (limpia) todo el contenido de la consola (ver HTML)
  */
 function limpiarConsola() {
-  document.getElementById( "textoImprimir" ).innerHTML = ""
-  document.getElementById( "entrada" ).value           = "";
+    document.getElementById("textoImprimir").innerHTML = ""
+    document.getElementById("entrada").value = "";
 }
 
 /**
  * Adiciona una texto a la consola de la GUI (Ver HTML)
  * @param texto Texto que se desea adicionar al final de la consola.
  */
-function addConsola ( texto ) {
-  document.getElementById( "textoImprimir" ).innerHTML += texto + "<br>";
-  var consola = document.getElementById( "consola" );
-  consola.scrollTop = consola.scrollHeight;
+function addConsola(texto) {
+    document.getElementById("textoImprimir").innerHTML += texto + "<br>";
+    var consola = document.getElementById("consola");
+    consola.scrollTop = consola.scrollHeight;
 }
 
 
 /**
  * Proceso de inicio de la terminal
  */
-function procesoInicio()
-{
+function procesoInicio() {
     entrada.focus();
 }
 
@@ -38,43 +53,53 @@ function procesoInicio()
 /**
  * Procesa el evento de teclado. Enter (13) procesa la orden y ESC (27) imprime el JSON
  */
-function procesarEntrada( e ) {
-	if (e.keyCode == 13) {
-		procesarComando ( document.getElementById( "entrada" ) );
-	}	
+function procesarEntrada(e) {
+    if (e.keyCode == 13) {
+        procesarComando(document.getElementById("entrada"));
+    }
 }
 
 /**
  * Procesa el comando enviado como argumento.
  * @param comando a procesar
  */
-function procesarComando ( comando ) {
-	var comandoParametros = comando.value.split(" ");
+function procesarComando(entrada_) {
+    var entrada = entrada_.value.split(" ");
 
-	addConsola ( "carloseg@ventas$ " );
+    var comando = entrada[0]
+    var parametros = []
+    for (const i in entrada) {
+        if (entrada.hasOwnProperty(i) && i > 0) {
+            const element = entrada[i];
+            parametros.push(element)
+        }
+    }
 
-    switch ( comandoParametros[0] ){
-        case 'clear': 
-            procesarClear( comandoParametros );
+    var prompt = usuario + "@" + computador + "$ "
+    addConsola(prompt);
+
+    switch (comando) {
+        case 'clear':
+            procesarClear(parametros);
             break;
 
 
         // ...
 
         default:
-            addConsola ( "uqsh: comando no reconocido: " + comandoParametros[0] );
+            addConsola("uqsh: comando no reconocido: " + comando);
     }
 
-    addConsola ( "" );
-    document.getElementById( "entrada" ).value = "";
+    addConsola("");
+    document.getElementById("entrada").value = "";
 }
 
 /**
  * Procesa el comando (clear)
  */
-function procesarClear ( comandoParametros ) {
-    if ( comandoParametros.length > 1 ) {
-        addConsola ( "clear: No requiere parámetros." )
+function procesarClear(comandoParametros) {
+    if (comandoParametros.length > 1) {
+        addConsola("clear: No requiere parámetros.")
     } else {
         limpiarConsola();
     }
