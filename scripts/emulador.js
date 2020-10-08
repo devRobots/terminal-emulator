@@ -243,7 +243,7 @@ function cat(parametros) {
             addConsola("el archivo " + parametros[i] + " no existe");
             return false;
         }
-        if (permisoEscritura(archivo)) {
+        if (permisoLectura(archivo)) {
             addConsola("Leyendo el contenido del archivo ....")
         } else {
             addConsola("no cuenta con permisos")
@@ -251,22 +251,26 @@ function cat(parametros) {
     }
 }
 
-function permisoEscritura(archivo) {
+/**
+ * Mira si el usuario activo tiene permisos de lectura en un archivo
+ * @param {archivo} archivo un Archivo del disco duro
+ */
+function permisoLectura(archivo) {
     var permisos = archivo.permisos
     var propietario = archivo.duenio
-    var grupo = archivo.grupo //agregar en el jason
+    var grupo = archivo.grupo
 
     if (usuario == propietario) {
-        if (permisos[2] == "r") {
+        if (permisos[1] == "r") {
             return true;
         }
     }
     if (obtenerGrupo(grupo).usuarios.includes(usuario)) {
-        if (permisos[5] == "r") {
+        if (permisos[4] == "r") {
             return true;
         }
     }
-    if (permisos[8] == "r") {
+    if (permisos[7] == "r") {
         return true;
     }
 }

@@ -6,30 +6,30 @@
             {
                 "nombre": "ensayo.txt",
                 "duenio": "luisa",
-                "grupo": "carlos",
+                "grupo": "amigos",
                 "fecha": "mar 19  2020 22:54:00",
-                "permisos": "--rw-r----"
+                "permisos": "-rw-r-----"
             },
             {
                 "nombre": "grafica.jpg",
                 "duenio": "joshua",
-                "grupo": "profesores",
+                "grupo": "ventas",
                 "fecha": "abr 07  2018 22:54:00",
-                "permisos": "--rw-r----"
+                "permisos": "-rw----r--"
             },
             {
                 "nombre": "parcial.pdf",
                 "duenio": "yesid",
-                "grupo": "profesores",
+                "grupo": "amigos",
                 "fecha": "feb 02  2019 22:54:00",
-                "permisos": "--rw-r----"
+                "permisos": "----r-----"
             },
             {
                 "nombre": "hojadevida.pdf",
                 "duenio": "cristian",
-                "grupo": "andres",
+                "grupo": "root",
                 "fecha": "ago 31  2019 22:54:00",
-                "permisos": "--rw-r----"
+                "permisos": "-rwxr-----"
             }
         ],
         "usuarios": [
@@ -95,26 +95,28 @@
             {
                 "nombre": "entrega1.doc",
                 "duenio": "carlos",
+                "grupo": "profesores",
                 "fecha": "sep 13  2020 22:54:00",
-                "permisos": "--rw-r----"
+                "permisos": "-rwxrwxrwx"
             },
             {
                 "nombre": "fotocedula.png",
                 "duenio": "julian",
+                "grupo": "supervisores",
                 "fecha": "mar 05  2020 22:54:00",
-                "permisos": "--rw-r----"
+                "permisos": "-rw-r-----"
             },
             {
                 "nombre": "correccion.txt",
-                "duenio": "andres",
+                "duenio": "root",
                 "fecha": "nov 25  2019 22:54:00",
-                "permisos": "--rw-r----"
+                "permisos": "-rw-r-----"
             },
             {
                 "nombre": "proyecto.zip",
-                "duenio": "claudia",
+                "duenio": "profesores",
                 "fecha": "ago 30  2019 22:54:00",
-                "permisos": "--rw-r----"
+                "permisos": "-rw-r-----"
             }
         ],
         "usuarios": [
@@ -181,26 +183,30 @@
             {
                 "nombre": "formularios.doc",
                 "duenio": "lina",
+                "grupo": "seguimientos",
                 "fecha": "dic 19  2019 22:54:00",
-                "permisos": "--rw-r----"
+                "permisos": "-rw-r-----"
             },
             {
                 "nombre": "presentacion.pdf",
                 "duenio": "juan",
+                "grupo": "amigos",
                 "fecha": "jun 24  2020 22:54:00",
-                "permisos": "--rw-r----"
+                "permisos": "-rw-r-----"
             },
             {
                 "nombre": "seguimiento4.txt",
                 "duenio": "stefania",
+                "grupo": "amigos",
                 "fecha": "sep 25  2020 22:54:00",
-                "permisos": "--rw-r----"
+                "permisos": "-rw-r-----"
             },
             {
                 "nombre": "modelo.pdf",
                 "duenio": "angelica",
+                "grupo": "angelica",
                 "fecha": "oct 01  2020 22:54:00",
-                "permisos": "--rw-r----"
+                "permisos": "-rw-r-----"
             }
         ],
         "usuarios": [
@@ -267,26 +273,30 @@
             {
                 "nombre": "finalproject.zip",
                 "duenio": "camilo",
+                "grupo": "proyecto",
                 "fecha": "nov 03  2019 22:54:00",
-                "permisos": "--rw-r----"
+                "permisos": "-rw-r-----"
             },
             {
                 "nombre": "disenio.png",
                 "duenio": "miguel",
+                "grupo": "tesis",
                 "fecha": "nov 21  2019 22:54:00",
-                "permisos": "--rw-r----"
+                "permisos": "-rw-r-----"
             },
             {
                 "nombre": "requisitos.txt",
                 "duenio": "mario",
+                "grupo": "proyecto",
                 "fecha": "dic 19  2019 22:54:00",
-                "permisos": "--rw-r----"
+                "permisos": "-rw-r-----"
             },
             {
                 "nombre": "diploma.pdf",
                 "duenio": "luis",
+                "grupo": "root",
                 "fecha": "ago 22  2019 22:54:00",
-                "permisos": "--rw-r----"
+                "permisos": "-rw-r-----"
             }
         ],
         "usuarios": [
