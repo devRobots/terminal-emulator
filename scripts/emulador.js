@@ -11,11 +11,10 @@
  * Lee el archivo computadores.json y lo guarda en la variable computadores
  */
 var computadores = []
-fetch("scripts/computadores.json")
-    .then(response => {
-        return response.json();
-    })
-    .then(data => computadores = data);
+async function obtenerComputadores() {
+    const response = await fetch("scripts/computadores.json");
+    computadores = await response.json();
+}
 
 /**
  * Variables de usuario y computador que se muestran en consola
@@ -54,7 +53,8 @@ function addConsola(texto) {
 /**
  * Proceso de inicio de la terminal
  */
-function procesoInicio() {
+async function procesoInicio() {
+    await obtenerComputadores()
     computador = obtenerComputador(hostname)
     entrada.focus();
 }
@@ -164,7 +164,6 @@ function verificarUsuario(usuario) {
 function obtenerArchivo(archivo) {
     const disco = computador.disco
     for (const i in disco) {
-        console.log(disco + i)
         if (disco.hasOwnProperty(i)) {
             const a = disco[i];
             if (a.nombre == archivo) {
@@ -218,7 +217,6 @@ function chown(parametros) {
 function ls(parametros) {
 
     const disco = computador.disco
-    console.log(parametros)
 
     if (parametros.length > 0) {
         for (const i in disco) {
