@@ -20,8 +20,25 @@ fetch("scripts/computadores.json")
 /**
  * Variables de usuario y computador que se muestran en consola
  */
-var usuario = "lu"
-var computador = "PP"
+var usuario = "luisa"
+var hostname = "PC1"
+var computador = null
+
+/**
+ * Obtiene un computador a partir de su nombre
+ * @param {String} nombre El hostname del computador a obtener
+ */
+function obtenerComputador(nombre) {
+    for (const i in computadores) {
+        if (computadores.hasOwnProperty(i)) {
+            const pc = computadores[i];
+            if (pc.hostname == nombre) {
+                return pc
+            }
+        }
+    }
+    return null
+}
 
 /**
  * Borra (limpia) todo el contenido de la consola (ver HTML)
