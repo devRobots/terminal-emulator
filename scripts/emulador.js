@@ -41,14 +41,6 @@ function obtenerComputador(nombre) {
 }
 
 /**
- * Borra (limpia) todo el contenido de la consola (ver HTML)
- */
-function limpiarConsola() {
-    document.getElementById("textoImprimir").innerHTML = ""
-    document.getElementById("entrada").value = "";
-}
-
-/**
  * Adiciona una texto a la consola de la GUI (Ver HTML)
  * @param texto Texto que se desea adicionar al final de la consola.
  */
@@ -63,6 +55,7 @@ function addConsola(texto) {
  * Proceso de inicio de la terminal
  */
 function procesoInicio() {
+    computador = obtenerComputador(hostname)
     entrada.focus();
 }
 
@@ -92,12 +85,12 @@ function procesarComando(entrada_) {
         }
     }
 
-    var prompt = usuario + "@" + computador + "$ "
+    var prompt = usuario + "@" + hostname + "$ "
     addConsola(prompt);
 
     switch (comando) {
         case 'clear':
-            procesarClear(parametros);
+            comandoClear(parametros);
             break;
 
 
@@ -114,11 +107,12 @@ function procesarComando(entrada_) {
 /**
  * Procesa el comando (clear)
  */
-function procesarClear(comandoParametros) {
+function comandoClear(comandoParametros) {
     if (comandoParametros.length > 1) {
         addConsola("clear: No requiere parámetros.")
     } else {
-        limpiarConsola();
+        document.getElementById("textoImprimir").innerHTML = ""
+        document.getElementById("entrada").value = "";
     }
 }
 
