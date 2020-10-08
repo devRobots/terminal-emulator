@@ -95,6 +95,9 @@ function procesarComando(entrada_) {
         case 'sudo':
             sudo(parametros)
             break;
+        case 'cat':
+            cat(parametros)
+            break;
         // ...
 
         default:
@@ -144,7 +147,7 @@ function sudo(parametros) {
 }
 
 function verificarUsuario(usuario) {
-    const usuarios = computadores.usuarios
+    const usuarios = computador.usuarios
     for (const i in usuarios) {
         if (usuarios.hasOwnProperty(i)) {
             const u = usuarios[i];
@@ -156,8 +159,9 @@ function verificarUsuario(usuario) {
     return false
 }
 function obtenerArchivo(archivo) {
-    const disco = computadores.disco
+    const disco = computador.disco
     for (const i in disco) {
+        console.log(disco + i)
         if (disco.hasOwnProperty(i)) {
             const a = disco[i];
             if (a.nombre == archivo) {
@@ -169,7 +173,7 @@ function obtenerArchivo(archivo) {
 }
 
 function obtenerGrupo(grupo) {
-    const grupos = computadores.grupos
+    const grupos = computador.grupos
     for (const i in grupos) {
         if (grupos.hasOwnProperty(i)) {
             const g = grupos[i];
@@ -213,5 +217,44 @@ function comandoLs(parametros) {
     if (parametrs > 0) {
 
 
+    }
+}
+
+/**
+ * Intenta leer el contenido de un archivo
+ * @param {String[]} parametros la lista de archivos
+ */
+function cat(parametros){
+    for (const i in parametros) {
+        var archivo = obtenerArchivo(parametros[i])
+        if (archivo == null) {
+            addConsola("el archivo " + parametros[i] + " no existe");
+            return false;
+        }
+        if(permisoEscritura(archivo)){
+            addConsola("Leyendo el contenido del archivo ....")
+        }else{
+            addConsola("no cuenta con permisos")
+        }
+    }
+}
+
+function permisoEscritura(archivo){
+    var permisos = archivo.permisos
+    var propietario = archivo.duenio
+    var grupo = archivo.grupo //agregar en el jason
+
+    if(usuario == propietario){
+        if(permisos[2]== "r"){
+            return true;
+        }
+    }
+    if(obtenerGrupo(grupo).usuarios.includes(usuario)){
+        if(permisos[5]== "r"){
+            return true;
+        }
+    }
+    if(permisos[8] == "r"){
+        return true;
     }
 }

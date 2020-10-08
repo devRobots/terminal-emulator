@@ -6,24 +6,28 @@
             {
                 "nombre": "ensayo.txt",
                 "duenio": "luisa",
+                "grupo": "carlos",
                 "fecha": "mar 19  2020 22:54:00",
                 "permisos": "--rw-r----"
             },
             {
                 "nombre": "grafica.jpg",
                 "duenio": "joshua",
+                "grupo": "profesores",
                 "fecha": "abr 07  2018 22:54:00",
                 "permisos": "--rw-r----"
             },
             {
                 "nombre": "parcial.pdf",
                 "duenio": "yesid",
+                "grupo": "profesores",
                 "fecha": "feb 02  2019 22:54:00",
                 "permisos": "--rw-r----"
             },
             {
                 "nombre": "hojadevida.pdf",
                 "duenio": "cristian",
+                "grupo": "andres",
                 "fecha": "ago 31  2019 22:54:00",
                 "permisos": "--rw-r----"
             }
