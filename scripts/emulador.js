@@ -76,17 +76,18 @@ function procesarComando(entrada_) {
     var entrada = entrada_.value.trim().split(" ")
 
     var comando = entrada[0]
-    var parametros = entrada.slice(1,entrada.length)
+    var parametros = entrada.slice(1, entrada.length)
 
     addConsola(prompt + entrada_.value, false)
 
     switch (comando) {
-        case 'clear':   comandoClear(parametros);   break;
-        case 'sudo':    sudo(parametros);           break;
-        case 'ls':      ls(parametros);             break;
-        case 'cat':     cat(parametros);            break;
+        case 'clear': comandoClear(parametros); break;
+        case 'sudo': sudo(parametros); break;
+        case 'ls': ls(parametros); break;
+        case 'cat': cat(parametros); break;
+        case 'rm': rm(parametros); break;
         // ...
-        default:        addConsola("uqsh: comando no reconocido: " + comando)
+        default: addConsola("uqsh: comando no reconocido: " + comando)
     }
 
     mostrarPrompt()
@@ -114,11 +115,11 @@ function sudo(parametros) {
     if (parametros.length > 0) {
         var comando = parametros[0]
         var subparametros = parametros.slice(1, parametros.length)
-        
+
         switch (comando) {
-            case 'sudo':    sudo(subparametros);    break;
-            case 'chown':   chown(subparametros);   break;
-            default:        addConsola("uqsh: comando no reconocido: " + comando)
+            case 'sudo': sudo(subparametros); break;
+            case 'chown': chown(subparametros); break;
+            default: addConsola("uqsh: comando no reconocido: " + comando)
         }
     } else {
         addConsola("sudo: Se esperaba un comando")
@@ -152,7 +153,7 @@ function chown(parametros) {
                         }
                     }
                     if (nombreGrupo) {
-                        if(obtenerGrupo(nombreGrupo)) {
+                        if (obtenerGrupo(nombreGrupo)) {
                             archivo.grupo = nombreGrupo
                         } else {
                             addConsola("chown: grupo invalido: '" + nombreGrupo + "'")
@@ -162,8 +163,8 @@ function chown(parametros) {
                         addConsola("chown: usuario invalido: '" + duenio + "'")
                     }
                 } else {
-                    addConsola("chown: no se puede acceder a '" + 
-                    nombreArchivo + "': No existe el fichero")
+                    addConsola("chown: no se puede acceder a '" +
+                        nombreArchivo + "': No existe el fichero")
                 }
             }
         }
@@ -187,7 +188,7 @@ function nano(parametros) {
                         addConsola("Permiso denegado: " + nombreArchivo)
                     }
                 } else {
-                    
+
                 }
             }
         }
@@ -217,6 +218,34 @@ function ls(parametros) {
     }
     if (parametros.length > 0 && parametros != '-l') {
         addConsola("ls: opción incorrecta -- " + "«" + parametros[0] + "»")
+    }
+}
+
+/**
+ * Intenta borrar un archivo especifico
+ * @param {String[]} parametros Parametros del comando rm 
+ */
+function rm(parametros) {
+
+    if (parametros.length == 0) {
+        addConsola("rm: falta un operando")
+    } else {
+
+        for (const i in parametros) {
+            var archivo = obtenerArchivo(parametros[i])
+
+            if (archivo == null) {
+                addConsola("rm: no se puede borrar '" + parametros[i] + "': no existe el archivo o el directorio")
+                return false
+            }
+            if (archivo != null && verificarPermisosEscritura(archivo)) {
+  
+                var pos = computador.disco.indexOf(archivo)
+                var elementoEliminado = computador.disco.splice(pos, 1)
+            } else {
+                addConsola("Permiso denegado:" + parametros[i])
+            }
+        }
     }
 }
 
