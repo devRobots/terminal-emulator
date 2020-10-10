@@ -16,13 +16,17 @@
 /** Contiene la informacion que se va a cargar desde el JSON */
 var computadores = []
 /** Cola de usuarios logeados */
-var usuario = ["luisa"]
+var usuarios = ["luisa"]
 /** Cola de hosts logeados */
 var hostname = ["PC1"]
+/** Usuario actual loggeado al computador */
+var usuario = "luisa"
 /** Prompt que se mostrara en consola*/
 var prompt = usuario + "@" + hostname + "$ "
 /** Computador actual en el que se encuentra logeado */
 var computador = null
+/** Indica si existe algun usuario loggeado */
+var loggedIn = true;
 
 /**
  * Proceso de inicio de la terminal
@@ -52,11 +56,15 @@ function addConsola(texto) {
  * Muestra el prompt en la consola
  */
 function mostrarPrompt() {
-    var i = usuario == "root" ? "#" : "$"
-    u = usuario[usuario.length - 1]
-    h = hostname[hostname.length - 1]
-    prompt = u + "@" + h + i + " "
-    document.getElementById("prompt").innerHTML = prompt
+    var out = "Login: "
+    if (loggedIn == true) {
+        var i = usuario == "root" ? "#" : "$ "
+        u = usuario
+        host = hostname[hostname.length - 1]
+        prompt = usuario + "@" + host + i + " "
+        out = prompt
+    }
+    document.getElementById("prompt").innerHTML = out
 }
 
 /**
@@ -64,7 +72,11 @@ function mostrarPrompt() {
  */
 function procesarEntrada(e) {
     if (e.keyCode == 13) {
-        procesarComando(document.getElementById("entrada"))
+        if (loggedIn) {
+            procesarComando(document.getElementById("entrada"))
+        } else {
+            login(document.getElementById("entrada").value.trim())
+        }
     }
 }
 
@@ -81,17 +93,54 @@ function procesarComando(entrada_) {
     addConsola(prompt + entrada_.value, false)
 
     switch (comando) {
-        case 'clear': comandoClear(parametros); break;
-        case 'sudo': sudo(parametros); break;
-        case 'ls': ls(parametros); break;
-        case 'cat': cat(parametros); break;
-        case 'rm': rm(parametros); break;
+        case 'clear':   comandoClear(parametros);   break;
+        case 'sudo':    sudo(parametros);           break;
+        case 'ls':      ls(parametros);             break;
+        case 'cat':     cat(parametros);            break;
+        case 'rm':      rm(parametros);             break;
+        case 'nano':    nano(parametros);           break;
+        case 'logout':  logout(parametros);         break;
+        case 'exit':    logout(parametros);         break;
         // ...
         default: addConsola("uqsh: comando no reconocido: " + comando)
     }
 
     mostrarPrompt()
     document.getElementById("entrada").value = ""
+}
+
+/**
+ * Inicia sesion con una cuenta valida de usuario del computador actual
+ * @param {string} usuario 
+ */
+function login(username) {
+    comandoClear([])
+    if (verificarUsuario(username)) {
+        console.log("Hola");
+        usuarios.push(username)
+        usuario = username
+        loggedIn = true;
+        addConsola("Login: " + username)
+    }
+    mostrarPrompt()
+}
+
+/**
+ * Cierra la sesion actual de un usuario
+ */
+function logout() {
+    if (usuarios.length > 1) {
+        usuarios.pop()
+        usuario = usuarios[usuarios.length-1]
+        hostname.pop()
+        computador = obtenerComputador(hostname)
+    } else {
+        usuarios = []
+        usuario = ""
+        loggedIn = false
+        comandoClear([])
+    }
+    mostrarPrompt()
 }
 
 /**
@@ -212,8 +261,8 @@ function ls(parametros) {
     }
     if (parametros == '-l') {
         for (const i in disco) {
-            addConsola(disco[i].permisos + " " + disco[i].duenio + " " + disco[i].grupo + " " +
-                disco[i].fecha + " " + disco[i].nombre)
+            addConsola(disco[i].permisos + " " + disco[i].duenio + " " + 
+            disco[i].grupo + " " + disco[i].fecha + " " + disco[i].nombre)
         }
     }
     if (parametros.length > 0 && parametros != '-l') {
@@ -235,7 +284,8 @@ function rm(parametros) {
             var archivo = obtenerArchivo(parametros[i])
 
             if (archivo == null) {
-                addConsola("rm: no se puede borrar '" + parametros[i] + "': no existe el archivo o el directorio")
+                addConsola("rm: no se puede borrar '" + parametros[i] +
+                "': no existe el archivo o el directorio")
                 return false
             }
             if (archivo != null && verificarPermisosEscritura(archivo)) {
