@@ -73,7 +73,7 @@ function procesarEntrada(e) {
  * @param comando a procesar
  */
 function procesarComando(entrada_) {
-    var entrada = entrada_.value.split(" ")
+    var entrada = entrada_.value.trim().split(" ")
 
     var comando = entrada[0]
     var parametros = entrada.slice(1,entrada.length)
@@ -144,15 +144,56 @@ function chown(parametros) {
                 var archivo = obtenerArchivo(nombreArchivo)
 
                 if (archivo != null) {
-                    archivo.duenio = duenio
-                    if (nombreGrupo != null) {
-                        archivo.grupo.nombre = grupo
+                    if (duenio) {
+                        if (verificarUsuario(duenio)) {
+                            archivo.duenio = duenio
+                        } else {
+                            addConsola("chown: usuario invalido: '" + duenio + "'")
+                        }
+                    }
+                    if (nombreGrupo) {
+                        if(obtenerGrupo(nombreGrupo)) {
+                            archivo.grupo = nombreGrupo
+                        } else {
+                            addConsola("chown: grupo invalido: '" + nombreGrupo + "'")
+                        }
+                    }
+                    if (!duenio && !nombreGrupo) {
+                        addConsola("chown: usuario invalido: '" + duenio + "'")
                     }
                 } else {
-                    addConsola("chown: no se puede acceder a '" + nombreArchivo + "': No existe el fichero")
+                    addConsola("chown: no se puede acceder a '" + 
+                    nombreArchivo + "': No existe el fichero")
                 }
             }
         }
+    }
+}
+
+/**
+ * Editor de texto de archivos, permite escribir en ellos si es posible
+ * @param {string[]} parametros Parametros del comando nano
+ */
+function nano(parametros) {
+    if (parametros.length > 0) {
+        for (const i in parametros) {
+            if (parametros.hasOwnProperty(i)) {
+                const nombreArchivo = parametros[i];
+                var archivo = obtenerArchivo(nombreArchivo)
+                if (archivo) {
+                    if (verificarPermisosEscritura(archivo)) {
+                        addConsola("Escribiendo en el archivo ...")
+                    } else {
+                        addConsola("Permiso denegado: " + nombreArchivo)
+                    }
+                } else {
+                    
+                }
+            }
+        }
+    } else {
+        addConsola("nano: falta un operando")
+        addConsola("Uso: nano [FILE]...")
     }
 }
 
@@ -223,6 +264,30 @@ function verificarPermisosLectura(archivo) {
 }
 
 /**
+ * Mira si el usuario activo tiene permisos de escritura en un archivo
+ * @param {archivo} archivo Archivo del disco duro a verificar permisos
+ */
+function verificarPermisosEscritura(archivo) {
+    var permisos = archivo.permisos
+    var propietario = archivo.duenio
+    var grupo = archivo.grupo
+
+    if (usuario == propietario) {
+        if (permisos[2] == "w") {
+            return true
+        }
+    }
+    if (obtenerGrupo(grupo).usuarios.includes(usuario)) {
+        if (permisos[5] == "w") {
+            return true
+        }
+    }
+    if (permisos[8] == "w") {
+        return true
+    }
+}
+
+/**
  * Verifica que el usuario exista en el computador actual
  * @param {string} usuario Nombre del usuario a verificar
  */
@@ -274,14 +339,14 @@ function obtenerGrupo(grupo) {
 }
 
 /**
- * Obtiene un computador a partir de su nombre
- * @param {String} nombre El hostname del computador a obtener
+ * Obtiene un computador a partir de su nombre o direccion IP
+ * @param {String} host El hostname o IP del computador a obtener
  */
-function obtenerComputador(nombre) {
+function obtenerComputador(host) {
     for (const i in computadores) {
         if (computadores.hasOwnProperty(i)) {
             const pc = computadores[i]
-            if (pc.hostname == nombre) {
+            if (pc.hostname == host || pc.ip == host) {
                 return pc
             }
         }
