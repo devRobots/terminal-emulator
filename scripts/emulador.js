@@ -16,17 +16,17 @@
 /** Contiene la informacion que se va a cargar desde el JSON */
 var computadores = []
 /** Cola de usuarios logeados */
-var usuarios = ["luisa"]
+var usuarios = []
 /** Cola de hosts logeados */
 var hostname = ["PC1"]
 /** Usuario actual loggeado al computador */
-var usuario = "luisa"
+var usuario = null
 /** Prompt que se mostrara en consola*/
 var prompt = usuario + "@" + hostname + "$ "
 /** Computador actual en el que se encuentra logeado */
 var computador = null
 /** Indica si existe algun usuario loggeado */
-var loggedIn = true;
+var loggedIn = false
 
 /**
  * Proceso de inicio de la terminal
@@ -90,7 +90,7 @@ function procesarComando(entrada_) {
     var comando = entrada[0]
     var parametros = entrada.slice(1, entrada.length)
 
-    addConsola(prompt + entrada_.value, false)
+    addConsola(prompt + entrada_.value)
 
     switch (comando) {
         case 'clear':   comandoClear(parametros);   break;
@@ -102,7 +102,7 @@ function procesarComando(entrada_) {
         case 'logout':  logout(parametros);         break;
         case 'exit':    logout(parametros);         break;
         // ...
-        default: addConsola("uqsh: comando no reconocido: " + comando)
+        default:        addConsola("uqsh: comando no reconocido: " + comando)
     }
 
     mostrarPrompt()
