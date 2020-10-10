@@ -13,6 +13,8 @@
  * @version    2.0
  */
 
+/** Nombre del shell */
+const shell = "jylsh"
 /** Contiene la informacion que se va a cargar desde el JSON */
 var computadores = []
 /** Cola de usuarios logeados */
@@ -104,7 +106,7 @@ function procesarComando(entrada_) {
         case 'logout':  logout(parametros);         break;
         case 'exit':    logout(parametros);         break;
         // ...
-        default:        addConsola("uqsh: comando no reconocido: " + comando)
+        default:        addConsola(shell + ": comando no reconocido: " + comando)
     }
 
     mostrarPrompt()
@@ -220,7 +222,7 @@ function sudo(parametros) {
         switch (comando) {
             case 'sudo': sudo(subparametros); break;
             case 'chown': chown(subparametros); break;
-            default: addConsola("uqsh: comando no reconocido: " + comando)
+            default: addConsola(shell + ": comando no reconocido: " + comando)
         }
     } else {
         addConsola("sudo: Se esperaba un comando")
