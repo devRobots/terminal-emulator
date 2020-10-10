@@ -163,15 +163,19 @@ function chown(parametros) {
 function ls(parametros) {
     const disco = computador.disco
 
-    if (parametros.length > 0) {
+    if (parametros.length == 0) {
+        for (var i in disco) {
+            addConsola(disco[i].nombre)
+        }
+    }
+    if (parametros == '-l') {
         for (const i in disco) {
             addConsola(disco[i].permisos + " " + disco[i].duenio + " " + disco[i].grupo + " " +
                 disco[i].fecha + " " + disco[i].nombre)
         }
-    } else {
-        for (var i in disco) {
-            addConsola(disco[i].nombre)
-        }
+    }
+    if (parametros.length > 0 && parametros != '-l') {
+        addConsola("ls: opción incorrecta -- " + "«" + parametros[0] + "»")
     }
 }
 
