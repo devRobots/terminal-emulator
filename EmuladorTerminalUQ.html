@@ -1,10 +1,16 @@
 <!-- 
  description Emulador de una terminal y varias máquinas en red usando Javascript
- author Julián Esteban Gutiérrez Posada y Carlos Eduardo Gómez Montoya
- email jugutier@uniquindio.edu.co carloseg@uniquindio.edu.co
+ 
+ author   Luisa Fernanda Cotte Sanchez
+ email    lfcottes@uqvirtual.edu.co
+ author   Yesid Shair Rosas Toro
+ email    ysrosast_1@uqvirtual.edu.co
+ author   Cristian Camilo Quiceno Laurente
+ email    ccquicenol@uqvirtual.edu.co
+
  licence GNU General Public License  Ver. 3.0 (GNU GPL v3)
  date Octubre 2020
- version 1.1
+ version 2.0
 -->
 <html>
 
@@ -32,14 +38,15 @@
 <body onload="procesoInicio();">
 
   <!-- Titulos -->
+
   <nav class="navbar navbar-default bg-dark text-white justify-content-center">
     <h4 class="navbar-text font-weight-bold">
       Emulador de una Terminal y Varias Máquinas en Red
     </h4>
   </nav>
 
-
   <!-- Consola de salida -->
+
   <main role="main" class="container">
     <div class="row align-items-center row-cols-1">
       <div class="column flex-column">
@@ -56,22 +63,17 @@
         <br>
         <div id="consola" onclick="entrada.focus()" contenteditable="false">
           <div id="textoImprimir">
-            Login: carloseg <br>
+            Login: luisa <br>
           </div>
-          <span id="prompt" style="font-weight: bold;">
-            carloseg@ventas$
-          </span>
+          <span id="prompt" style="font-weight: bold;"></span>
           <input id="entrada" type="text" size="100" value="" onkeypress="procesarEntrada(event);">
         </div>
       </div>
     </div>
   </main>
-  <br>
-  <br>
 
-  <p>
+  <!-- Licencia del software -->
 
-    <!-- Licencia del software -->
   <footer class="page-footer bg-dark text-white fixed-bottom">
     <div class="container-fluid text-md-left">
       <center>
@@ -92,7 +94,6 @@
   </footer>
 </body>
 
-<!--  <script src= "scripts/datosJSON.js"></script> -->
 <script src="scripts/emulador.js"></script>
 
 </html>

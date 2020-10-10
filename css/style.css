@@ -1,12 +1,18 @@
-/*
- description Emulador de una terminal y varias máquinas en red usando Javascript
- description Componente - Estilos CSS
- author Julián Esteban Gutiérrez Posada y Carlos Eduardo Gomez Montoya
- email jugutier@uniquindio.edu.co carloseg@uniquindio.edu.co
- licence GNU General Public License  Ver. 4.0 (GNU GPL v4)
- date Septiembre 2020
- version 1.0
-*/
+/**
+ * @description Emulador de una terminal y varias máquinas en red usando Javascript
+ *
+ * @author     Luisa Fernanda Cotte Sanchez
+ * @email      lfcottes@uqvirtual.edu.co
+ * @author     Yesid Shair Rosas Toro
+ * @email      ysrosast_1@uqvirtual.edu.co
+ * @author     Cristian Camilo Quiceno Laurente
+ * @email      ccquicenol@uqvirtual.edu.co
+ *
+ * @licence    GNU General Public License  Ver. 3.0 (GNU GPL v3)
+ * @date       Octubre 2020
+ * @version    2.0
+ */
+ 
 #consola {
     border: 5px solid #555;
     border-radius: 5px;
@@ -15,7 +21,7 @@
     box-shadow: 0px 0px 20px 2.5px black;
     height: 300px;
     background-color: #000000;
-    color: #00FF00;
+    color: #0D0;
     line-height: 20px;
     
     overflow: auto;
@@ -24,13 +30,18 @@
     text-align: left; 
     width:100%;
     
-    text-shadow: 0px 0px 15px #0d0;
 }
+
+#prompt {
+    color: #00FF00;
+    text-shadow: 0px 0px 10px #0F0;
+}
+
 input {
     border: none;
     outline: none;
     background-color: transparent;
-    color: #00FF00;
+    color: #0D0;
     font-family: monospace;
     font-size: 14px;
 }
