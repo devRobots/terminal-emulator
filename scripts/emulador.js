@@ -477,7 +477,7 @@ function obtenerComputador(host) {
     for (const i in computadores) {
         if (computadores.hasOwnProperty(i)) {
             const pc = computadores[i]
-            if (pc.hostname == host || pc.ip == host) {
+            if (pc.hostname == host || pc.IP == host) {
                 return pc
             }
         }
