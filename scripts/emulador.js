@@ -105,6 +105,7 @@ function procesarComando(entrada_) {
         case 'hostname':comandoHostname(parametros);break;
         case 'logout':  logout(parametros);         break;
         case 'exit':    logout(parametros);         break;
+        case 'touch': touch(parametros); break;
         // ...
         default:        addConsola(shell + ": comando no reconocido: " + comando)
     }
@@ -134,7 +135,7 @@ function login(username) {
 function logout() {
     if (usuarios.length > 1) {
         usuarios.pop()
-        usuario = usuarios[usuarios.length-1]
+        usuario = usuarios[usuarios.length - 1]
         hostname.pop()
         computador = obtenerComputador(hostname)
     } else {
@@ -315,8 +316,8 @@ function ls(parametros) {
     }
     if (parametros == '-l') {
         for (const i in disco) {
-            addConsola(disco[i].permisos + " " + disco[i].duenio + " " + 
-            disco[i].grupo + " " + disco[i].fecha + " " + disco[i].nombre)
+            addConsola(disco[i].permisos + " " + disco[i].duenio + " " +
+                disco[i].grupo + " " + disco[i].fecha + " " + disco[i].nombre)
         }
     }
     if (parametros.length > 0 && parametros != '-l') {
@@ -326,7 +327,7 @@ function ls(parametros) {
 
 /**
  * Intenta borrar un archivo especifico
- * @param {String[]} parametros Parametros del comando rm 
+ * @param {string[]} parametros Parametros del comando rm 
  */
 function rm(parametros) {
     if (parametros.length == 0) {
@@ -338,7 +339,7 @@ function rm(parametros) {
 
             if (archivo == null) {
                 addConsola("rm: no se puede borrar '" + parametros[i] +
-                "': no existe el archivo o el directorio")
+                    "': no existe el archivo o el directorio")
                 return false
             }
             if (archivo != null && verificarPermisosEscritura(archivo)) {
@@ -346,6 +347,42 @@ function rm(parametros) {
                 computador.disco.splice(pos, 1)
             } else {
                 addConsola("Permiso denegado:" + parametros[i])
+            }
+        }
+    }
+}
+
+/**
+ * Intenta crear un	“archivo” en “disco” de	la máquina actual
+ * @param {string[]} parametros Parametros del comando touch
+ */
+function touch(parametros) {
+
+    if (parametros.length == 0) {
+        addConsola("touch: falta un archivo como argumento")
+    } else {
+
+        for (const i in parametros) {
+            var archivo = obtenerArchivo(parametros[i])
+
+            if (archivo == null) {
+
+                var nuevo = {
+                    "nombre": parametros[0], "duenio": usuario, "grupo": usuario,
+                    "fecha": "oct 09 2020 22:54:00", "permisos": "-rw-r--r--"
+                }
+                computador.disco.push(nuevo)
+                console.log(computador.disco)
+            }
+            if (archivo != null && verificarPermisosEscritura(obtenerArchivo(parametros[i]))) {
+                var aux = obtenerArchivo(parametros[i])
+                aux.fecha = "oct 09 2020 22:54:00"
+                console.log(computador.disco)
+
+            }
+            if (archivo != null && !verificarPermisosEscritura(obtenerArchivo(parametros[i]))) {
+                addConsola("touch: no se puede efectuar `touch' sobre '" + parametros[i] +
+                    "': Permiso denegado")
             }
         }
     }
