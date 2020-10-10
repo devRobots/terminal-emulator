@@ -292,7 +292,8 @@ function nano(parametros) {
                         addConsola("Permiso denegado: " + nombreArchivo)
                     }
                 } else {
-
+                    touch([nombreArchivo])
+                    addConsola("Escribiendo en el archivo ...")
                 }
             }
         }
