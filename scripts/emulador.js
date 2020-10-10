@@ -99,6 +99,7 @@ function procesarComando(entrada_) {
         case 'cat':     cat(parametros);            break;
         case 'rm':      rm(parametros);             break;
         case 'nano':    nano(parametros);           break;
+        case 'lsgroup': lsgroup(parametros);        break;
         case 'logout':  logout(parametros);         break;
         case 'exit':    logout(parametros);         break;
         // ...
@@ -116,7 +117,6 @@ function procesarComando(entrada_) {
 function login(username) {
     comandoClear([])
     if (verificarUsuario(username)) {
-        console.log("Hola");
         usuarios.push(username)
         usuario = username
         loggedIn = true;
@@ -141,6 +141,35 @@ function logout() {
         comandoClear([])
     }
     mostrarPrompt()
+}
+
+/**
+ * Lista los grupos del computador actual
+ * Si se le indica tambien listara los usuarios que contiene un grupo
+ * @param {parametros} parametros Parametros del comando lsgroup
+ */
+function lsgroup(parametros) {
+    if (parametros.length == 0) {
+        var grupos = computador.grupos
+        var salida = []
+        for (const i in grupos) {
+            if (grupos.hasOwnProperty(i)) {
+                const grupo = grupos[i];
+                salida.push(grupo.nombre)
+            }
+        }
+        addConsola("(" + salida + ")")
+    } else {
+        for (const i in parametros) {
+            if (parametros.hasOwnProperty(i)) {
+                const nombreGrupo = parametros[i];
+                var grupo = obtenerGrupo(nombreGrupo)
+                if (grupo) {
+                    addConsola(nombreGrupo + ": (" + grupo.usuarios + ")")
+                }
+            }
+        }
+    }
 }
 
 /**
