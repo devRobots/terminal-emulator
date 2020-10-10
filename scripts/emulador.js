@@ -100,6 +100,7 @@ function procesarComando(entrada_) {
         case 'rm':      rm(parametros);             break;
         case 'nano':    nano(parametros);           break;
         case 'lsgroup': lsgroup(parametros);        break;
+        case 'hostname':comandoHostname(parametros);break;
         case 'logout':  logout(parametros);         break;
         case 'exit':    logout(parametros);         break;
         // ...
@@ -166,9 +167,31 @@ function lsgroup(parametros) {
                 var grupo = obtenerGrupo(nombreGrupo)
                 if (grupo) {
                     addConsola(nombreGrupo + ": (" + grupo.usuarios + ")")
+                } else { 
+                    addConsola("lsgroup: grupo invalido '" + nombreGrupo + "'")
                 }
             }
         }
+    }
+}
+
+/**
+ * Muestra el hostname y la diraccion IP
+ * @param {string[]} parametros Parametros del comando hostname
+ */
+function comandoHostname(parametros) {
+    if (parametros.length == 0) {
+        addConsola(hostname)
+    } else if (parametros.length == 1) {
+        if (parametros[0] == "-I") {
+            addConsola(obtenerComputador(hostname).IP)
+        } else {
+            addConsola("hostname: invalid option -- '" + parametros[0] + "'")
+            addConsola("Uso: hostname [-I]")
+        }
+    } else {
+        addConsola("hostname: invalid options -- '" + parametros + "'")
+        addConsola("Uso: hostname [-I]")
     }
 }
 
@@ -304,7 +327,6 @@ function ls(parametros) {
  * @param {String[]} parametros Parametros del comando rm 
  */
 function rm(parametros) {
-
     if (parametros.length == 0) {
         addConsola("rm: falta un operando")
     } else {
@@ -318,9 +340,8 @@ function rm(parametros) {
                 return false
             }
             if (archivo != null && verificarPermisosEscritura(archivo)) {
-  
                 var pos = computador.disco.indexOf(archivo)
-                var elementoEliminado = computador.disco.splice(pos, 1)
+                computador.disco.splice(pos, 1)
             } else {
                 addConsola("Permiso denegado:" + parametros[i])
             }
