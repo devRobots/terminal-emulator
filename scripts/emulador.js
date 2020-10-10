@@ -1,39 +1,41 @@
-/*
- description Emulador de una terminal y varias máquinas en red usando Javascript
- author Julián Esteban Gutiérrez Posada y Carlos Eduardo Gómez Montoya
- email jugutier@uniquindio.edu.co carloseg@uniquindio.edu.co
- licence GNU General Public License  Ver. 3.0 (GNU GPL v3)
- date Octubre 2020
- version 1.1
-*/
-
 /**
- * Lee el archivo computadores.json y lo guarda en la variable computadores
+ * @description Emulador de una terminal y varias máquinas en red usando Javascript
+ *
+ * @author     Luisa Fernanda Cotte Sanchez
+ * @email      lfcottes@uqvirtual.edu.co
+ * @author     Yesid Shair Rosas Toro
+ * @email      ysrosast_1@uqvirtual.edu.co
+ * @author     Cristian Camilo Quiceno Laurente
+ * @email      ccquicenol@uqvirtual.edu.co
+ *
+ * @licence    GNU General Public License  Ver. 3.0 (GNU GPL v3)
+ * @date       Octubre 2020
+ * @version    2.0
  */
+
+/** Contiene la informacion que se va a cargar desde el JSON */
 var computadores = []
-
-/**
- * Variables de usuario y computador que se muestran en consola
- */
-var usuario = "luisa"
-var hostname = "PC1"
+/** Cola de usuarios logeados */
+var usuario = ["luisa"]
+/** Cola de hosts logeados */
+var hostname = ["PC1"]
+/** Prompt que se mostrara en consola*/
 var prompt = usuario + "@" + hostname + "$ "
+/** Computador actual en el que se encuentra logeado */
 var computador = null
 
 /**
- * Obtiene un computador a partir de su nombre
- * @param {String} nombre El hostname del computador a obtener
+ * Proceso de inicio de la terminal
+ * Se ejecuta al momento de cargar la pagina
+ * 
+ * @async Espera a que el archivo JSON cargue
  */
-function obtenerComputador(nombre) {
-    for (const i in computadores) {
-        if (computadores.hasOwnProperty(i)) {
-            const pc = computadores[i]
-            if (pc.hostname == nombre) {
-                return pc
-            }
-        }
-    }
-    return null
+async function procesoInicio() {
+    mostrarPrompt()
+    const response = await fetch("scripts/computadores.json")
+    computadores = await response.json()
+    computador = obtenerComputador(hostname)
+    entrada.focus()
 }
 
 /**
@@ -46,27 +48,16 @@ function addConsola(texto) {
     consola.scrollTop = consola.scrollHeight
 }
 
+/**
+ * Muestra el prompt en la consola
+ */
 function mostrarPrompt() {
-    prompt = usuario + "@" + hostname + "$ "
+    var i = usuario == "root" ? "#" : "$"
+    u = usuario[usuario.length - 1]
+    h = hostname[hostname.length - 1]
+    prompt = u + "@" + h + i + " "
     document.getElementById("prompt").innerHTML = prompt
 }
-
-
-/**
- * Proceso de inicio de la terminal
- */
-async function procesoInicio() {
-    mostrarPrompt()
-    const response = await fetch("scripts/computadores.json")
-    computadores = await response.json()
-    computador = obtenerComputador(hostname)
-    darFoco
-}
-
-function darFoco() {
-    entrada.focus()
-}
-
 
 /**
  * Procesa el evento de teclado. Enter (13) procesa la orden y ESC (27) imprime el JSON
@@ -85,34 +76,17 @@ function procesarComando(entrada_) {
     var entrada = entrada_.value.split(" ")
 
     var comando = entrada[0]
-    var parametros = []
-    for (const i in entrada) {
-        if (entrada.hasOwnProperty(i) && i > 0) {
-            const element = entrada[i]
-            parametros.push(element)
-        }
-    }
+    var parametros = entrada.slice(1,entrada.length)
 
     addConsola(prompt + entrada_.value, false)
 
     switch (comando) {
-        case 'clear':
-            comandoClear(parametros)
-            break
-        case 'sudo':
-            sudo(parametros)
-            break
-        case 'ls':
-            ls(parametros)
-            break
-        case 'cat':
-            cat(parametros)
-            break
-
+        case 'clear':   comandoClear(parametros);   break;
+        case 'sudo':    sudo(parametros);           break;
+        case 'ls':      ls(parametros);             break;
+        case 'cat':     cat(parametros);            break;
         // ...
-
-        default:
-            addConsola("uqsh: comando no reconocido: " + comando)
+        default:        addConsola("uqsh: comando no reconocido: " + comando)
     }
 
     mostrarPrompt()
@@ -120,10 +94,11 @@ function procesarComando(entrada_) {
 }
 
 /**
- * Procesa el comando (clear)
+ * Limpia la consola
+ * @param {string[]} parametros Parametros del comando clear
  */
-function comandoClear(comandoParametros) {
-    if (comandoParametros.length > 1) {
+function comandoClear(parametros) {
+    if (parametros.length > 1) {
         addConsola("clear: No requiere parámetros.")
     } else {
         document.getElementById("textoImprimir").innerHTML = ""
@@ -131,70 +106,29 @@ function comandoClear(comandoParametros) {
     }
 }
 
+/**
+ * Ejecuta una instruccion como super usuario
+ * @param {string[]} parametros Parametros del comando sudo
+ */
 function sudo(parametros) {
     if (parametros.length > 0) {
         var comando = parametros[0]
-        var subparametros = []
-        for (const i in parametros) {
-            if (parametros.hasOwnProperty(i) && i > 0) {
-                const element = parametros[i]
-                subparametros.push(element)
-            }
-        }
+        var subparametros = parametros.slice(1, parametros.length)
+        
         switch (comando) {
-            case 'sudo':
-                sudo(subparametros)
-                break
-            case 'chown':
-                chown(subparametros)
-                break
-            default:
-                addConsola("uqsh: comando no reconocido: " + comando)
-                break
+            case 'sudo':    sudo(subparametros);    break;
+            case 'chown':   chown(subparametros);   break;
+            default:        addConsola("uqsh: comando no reconocido: " + comando)
         }
     } else {
         addConsola("sudo: Se esperaba un comando")
     }
 }
 
-function verificarUsuario(usuario) {
-    const usuarios = computador.usuarios
-    for (const i in usuarios) {
-        if (usuarios.hasOwnProperty(i)) {
-            const u = usuarios[i]
-            if (u == usuario) {
-                return true
-            }
-        }
-    }
-    return false
-}
-function obtenerArchivo(archivo) {
-    const disco = computador.disco
-    for (const i in disco) {
-        if (disco.hasOwnProperty(i)) {
-            const a = disco[i]
-            if (a.nombre == archivo) {
-                return a
-            }
-        }
-    }
-    return null
-}
-
-function obtenerGrupo(grupo) {
-    const grupos = computador.grupos
-    for (const i in grupos) {
-        if (grupos.hasOwnProperty(i)) {
-            const g = grupos[i]
-            if (g.nombre == grupo) {
-                return g
-            }
-        }
-    }
-    return null
-}
-
+/**
+ * Cambia el duenio y grupo de uno o varios archivos en el computador actual
+ * @param {parametros} parametros Parametros del comando chown
+ */
 function chown(parametros) {
     if (parametros.length > 1) {
         var dueniogrupo = parametros[0].split(":")
@@ -222,8 +156,11 @@ function chown(parametros) {
     }
 }
 
+/**
+ * Lista los archivos del computador actual
+ * @param {string[]} parametros Parametros del comando ls
+ */
 function ls(parametros) {
-
     const disco = computador.disco
 
     if (parametros.length > 0) {
@@ -240,7 +177,7 @@ function ls(parametros) {
 
 /**
  * Intenta leer el contenido de un archivo
- * @param {String[]} parametros la lista de archivos
+ * @param {string[]} parametros la lista de archivos
  */
 function cat(parametros) {
     for (const i in parametros) {
@@ -249,7 +186,7 @@ function cat(parametros) {
             addConsola("el archivo " + parametros[i] + " no existe")
             return false
         }
-        if (permisoLectura(archivo)) {
+        if (verificarPermisosLectura(archivo)) {
             addConsola("Leyendo el contenido del archivo ....")
         } else {
             addConsola("no cuenta con permisos")
@@ -261,7 +198,7 @@ function cat(parametros) {
  * Mira si el usuario activo tiene permisos de lectura en un archivo
  * @param {archivo} archivo un Archivo del disco duro
  */
-function permisoLectura(archivo) {
+function verificarPermisosLectura(archivo) {
     var permisos = archivo.permisos
     var propietario = archivo.duenio
     var grupo = archivo.grupo
@@ -279,4 +216,71 @@ function permisoLectura(archivo) {
     if (permisos[7] == "r") {
         return true
     }
+}
+
+/**
+ * Verifica que el usuario exista en el computador actual
+ * @param {string} usuario Nombre del usuario a verificar
+ */
+function verificarUsuario(usuario) {
+    const usuarios = computador.usuarios
+    for (const i in usuarios) {
+        if (usuarios.hasOwnProperty(i)) {
+            const u = usuarios[i]
+            if (u == usuario) {
+                return true
+            }
+        }
+    }
+    return false
+}
+
+/**
+ * Obtiene un archivo del computador actual
+ * @param {string} archivo Nombre del archivo a obtener
+ */
+function obtenerArchivo(archivo) {
+    const disco = computador.disco
+    for (const i in disco) {
+        if (disco.hasOwnProperty(i)) {
+            const a = disco[i]
+            if (a.nombre == archivo) {
+                return a
+            }
+        }
+    }
+    return null
+}
+
+/**
+ * Obtiene un grupo del computador actual
+ * @param {string} grupo Nombre del grupo a obtener
+ */
+function obtenerGrupo(grupo) {
+    const grupos = computador.grupos
+    for (const i in grupos) {
+        if (grupos.hasOwnProperty(i)) {
+            const g = grupos[i]
+            if (g.nombre == grupo) {
+                return g
+            }
+        }
+    }
+    return null
+}
+
+/**
+ * Obtiene un computador a partir de su nombre
+ * @param {String} nombre El hostname del computador a obtener
+ */
+function obtenerComputador(nombre) {
+    for (const i in computadores) {
+        if (computadores.hasOwnProperty(i)) {
+            const pc = computadores[i]
+            if (pc.hostname == nombre) {
+                return pc
+            }
+        }
+    }
+    return null
 }
