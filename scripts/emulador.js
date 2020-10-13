@@ -94,6 +94,7 @@ function procesarComando(entrada_) {
 
     addConsola(prompt + entrada_.value)
 
+
     switch (comando) {
         case 'clear':   comandoClear(parametros);   break;
         case 'sudo':    sudo(parametros);           break;
@@ -108,7 +109,10 @@ function procesarComando(entrada_) {
         case 'chmod': chmod(parametros);            break;
         case 'touch': touch(parametros);            break;
         // ...
-        default:        addConsola(shell + ": comando no reconocido: " + comando)
+        default:   
+            if(comando[0] == "."){
+                ejecutar(comando)
+            }else{addConsola(shell + ": comando no reconocido: " + comando)}
     }
 
     mostrarPrompt()
@@ -416,7 +420,7 @@ function cat(parametros) {
 
 /**
  * Mira si el usuario activo tiene permisos de lectura en un archivo
- * @param {archivo} archivo un Archivo del disco duro
+ * @param {archivo} archivo Archivo del disco duro a verificar permisos
  */
 function verificarPermisosLectura(archivo) {
     var permisos = archivo.permisos
@@ -458,6 +462,30 @@ function verificarPermisosEscritura(archivo) {
         }
     }
     if (permisos[8] == "w") {
+        return true
+    }
+}
+
+/**
+ * Mira si el usuario activo tiene permisos de Ejecucion en un archivo
+ * @param {archivo} archivo Archivo del disco duro a verificar permisos
+ */
+function verificarPermisosEjecucion(archivo) {
+    var permisos = archivo.permisos
+    var propietario = archivo.duenio
+    var grupo = archivo.grupo
+
+    if (usuario == propietario) {
+        if (permisos[3] == "x") {
+            return true
+        }
+    }
+    if (obtenerGrupo(grupo).usuarios.includes(usuario)) {
+        if (permisos[6] == "x") {
+            return true
+        }
+    }
+    if (permisos[9] == "x") {
         return true
     }
 }
@@ -539,7 +567,6 @@ function chmod(parametros) {
         addConsola("chmod: falta un archivo como argumento")
         return false
     }
-    console.log(parametros[0])
     var permisos = crearPermisos(parametros[0]);
         
     if(permisos == null){
@@ -549,12 +576,12 @@ function chmod(parametros) {
 
     var subparametros = parametros.slice(1, parametros.length)
     for (const i in subparametros) {
-        var archivo = obtenerArchivo(subparametros[i])
+        const archivo = obtenerArchivo(subparametros[i])
         if (archivo == null) {
             addConsola("chmod: " + subparametros[i] + ": No existe el archivo o directorio");
             return false;
         }
-        addConsola("se edito :v, bueno despues lo agrego :p")
+        archivo.permisos = permisos
     }
 }
 
@@ -564,9 +591,7 @@ function crearPermisos(permisos){
         return null
     }
     for(let i = 0; i< 3; i++){
-        var valor = parseInt(permisos[0]) 
-        console.log(valor)
-        
+        var valor = parseInt(permisos[i]) 
         if(valor > 7){
             return null
         }
@@ -584,8 +609,30 @@ function crearPermisos(permisos){
             aux += "x"
             valor -= 1
         }else{ aux += "-"}
-
-        permisos[0] = permisos[0]/10
     }
     return aux
+}
+/**
+ * ejecuta un archivo con ./
+ * @param {String} comando el archivo a ejecutar
+ */
+function ejecutar(comando){
+    if(comando[1] == "/"){
+        if(comando.length ==2){
+            addConsola("bash: ./: Es un directorio")
+        }else{
+            var archivo = obtenerArchivo(comando.slice(2))
+            if (archivo == null) {
+                addConsola("bash: " + comando + ": No existe el archivo o directorio");
+                return false;
+            }
+            if (verificarPermisosEjecucion(archivo)) {
+                addConsola("“Ejecutando en el archivo ....")
+            } else {
+                addConsola("bash: " + comando + ": Permiso denegado")
+            }
+        }
+    }else{
+        addConsola(".: modo de empleo: nombre de archivo [argumentos]")
+    }
 }
