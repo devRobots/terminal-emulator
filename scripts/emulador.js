@@ -105,7 +105,8 @@ function procesarComando(entrada_) {
         case 'hostname':comandoHostname(parametros);break;
         case 'logout':  logout(parametros);         break;
         case 'exit':    logout(parametros);         break;
-        case 'touch': touch(parametros); break;
+        case 'chmod': chmod(parametros);            break;
+        case 'touch': touch(parametros);            break;
         // ...
         default:        addConsola(shell + ": comando no reconocido: " + comando)
     }
@@ -375,13 +376,13 @@ function touch(parametros) {
                 computador.disco.push(nuevo)
                 console.log(computador.disco)
             }
-            if (archivo != null && verificarPermisosEscritura(obtenerArchivo(parametros[i]))) {
-                var aux = obtenerArchivo(parametros[i])
+            if (archivo != null && verificarPermisosEscritura(archivo)) {
+                var aux = archivo
                 aux.fecha = "oct 09 2020 22:54:00"
                 console.log(computador.disco)
 
             }
-            if (archivo != null && !verificarPermisosEscritura(obtenerArchivo(parametros[i]))) {
+            if (archivo != null && !verificarPermisosEscritura(archivo)) {
                 addConsola("touch: no se puede efectuar `touch' sobre '" + parametros[i] +
                     "': Permiso denegado")
             }
@@ -390,20 +391,25 @@ function touch(parametros) {
 }
 
 /**
+ * Procesa el comando (cat)
  * Intenta leer el contenido de un archivo
  * @param {string[]} parametros la lista de archivos
  */
 function cat(parametros) {
+    if(parametros.length == 0){
+        addConsola("cat: falta un archivo como argumento")
+        return false;
+    }
     for (const i in parametros) {
         var archivo = obtenerArchivo(parametros[i])
         if (archivo == null) {
-            addConsola("el archivo " + parametros[i] + " no existe")
-            return false
+            addConsola("cat: " + parametros[i] + ": No existe el archivo o directorio");
+            return false;
         }
         if (verificarPermisosLectura(archivo)) {
             addConsola("Leyendo el contenido del archivo ....")
         } else {
-            addConsola("no cuenta con permisos")
+            addConsola("cat: " + parametros[i] + ": Permiso denegado")
         }
     }
 }
@@ -521,4 +527,65 @@ function obtenerComputador(host) {
         }
     }
     return null
+}
+
+/**
+ * Procesa el comando (chmod)
+ * Cambia los Permisos de un archivo
+ * @param {string[]} parametros la lista de archivos
+ */
+function chmod(parametros) {
+    if (parametros.length == 0) {
+        addConsola("chmod: falta un archivo como argumento")
+        return false
+    }
+    console.log(parametros[0])
+    var permisos = crearPermisos(parametros[0]);
+        
+    if(permisos == null){
+        addConsola("chmod: modo invalido <<" + parametros[0] + ">>" )
+        return false
+    }
+
+    var subparametros = parametros.slice(1, parametros.length)
+    for (const i in subparametros) {
+        var archivo = obtenerArchivo(subparametros[i])
+        if (archivo == null) {
+            addConsola("chmod: " + subparametros[i] + ": No existe el archivo o directorio");
+            return false;
+        }
+        addConsola("se edito :v, bueno despues lo agrego :p")
+    }
+}
+
+function crearPermisos(permisos){
+    var aux = "-";
+    if(permisos.length > 3){
+        return null
+    }
+    for(let i = 0; i< 3; i++){
+        var valor = parseInt(permisos[0]) 
+        console.log(valor)
+        
+        if(valor > 7){
+            return null
+        }
+        if(valor >= 4){
+            aux += "r"
+            valor -= 4
+        }else{ aux += "-"}
+
+        if(valor >= 2){
+            aux += "w"
+            valor -= 2
+        }else{ aux += "-"}
+
+        if(valor >= 1){
+            aux += "x"
+            valor -= 1
+        }else{ aux += "-"}
+
+        permisos[0] = permisos[0]/10
+    }
+    return aux
 }
