@@ -15,8 +15,6 @@
 
 /** Nombre del shell */
 const shell = "jylsh"
-/** Contiene la informacion que se va a cargar desde el JSON */
-var computadores = []
 /** Cola de usuarios logeados */
 var usuarios = []
 /** Cola de hosts logeados */
@@ -29,6 +27,10 @@ var prompt = usuario + "@" + hostname + "$ "
 var computador = null
 /** Indica si existe algun usuario loggeado */
 var loggedIn = false
+/** Historial de comandos hacia atras */
+var backwardHistory = []
+/** Historial de comandos hacia adelante */
+var fordwardHistory = []
 
 /**
  * Proceso de inicio de la terminal
@@ -38,8 +40,6 @@ var loggedIn = false
  */
 async function procesoInicio() {
     mostrarPrompt()
-    const response = await fetch("scripts/computadores.json")
-    computadores = await response.json()
     computador = obtenerComputador(hostname)
     entrada.focus()
 }
@@ -79,6 +79,24 @@ function procesarEntrada(e) {
         } else {
             login(document.getElementById("entrada").value.trim())
         }
+    } 
+}
+
+function navegar(e) {
+    if (e.keyCode == 38) {
+        var command = backwardHistory.pop()
+        if (command) {
+            fordwardHistory.push(command)
+            document.getElementById("entrada").value = command
+        }
+    } else if (e.keyCode == 40) {
+        var command = fordwardHistory.pop()
+        if (command) {
+            backwardHistory.push(command)
+            document.getElementById("entrada").value = command
+        } else {
+            document.getElementById("entrada").value = ""
+        }
     }
 }
 
@@ -92,8 +110,8 @@ function procesarComando(entrada_) {
     var comando = entrada[0]
     var parametros = entrada.slice(1, entrada.length)
 
+    var flag = true;
     addConsola(prompt + entrada_.value)
-
 
     switch (comando) {
         case 'clear':   comandoClear(parametros);   break;
@@ -112,7 +130,14 @@ function procesarComando(entrada_) {
         default:   
             if(comando[0] == "."){
                 ejecutar(comando)
-            }else{addConsola(shell + ": comando no reconocido: " + comando)}
+            } else {
+                addConsola(shell + ": comando no reconocido: " + comando)
+                flag = false;
+            }
+    }
+
+    if (flag == true) {
+        backwardHistory.push(entrada_.value)
     }
 
     mostrarPrompt()
@@ -130,6 +155,8 @@ function login(username) {
         usuario = username
         loggedIn = true;
         addConsola("Login: " + username)
+        backwardHistory = []
+        fordwardHistory = []
     }
     mostrarPrompt()
 }

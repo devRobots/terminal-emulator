@@ -1,4 +1,4 @@
-[
+const computadores = [
     {
         "hostname": "PC1",
         "IP": "192.168.0.32",

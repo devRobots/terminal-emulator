@@ -66,7 +66,7 @@
           <div id="textoImprimir">
           </div>
           <span id="prompt" style="font-weight: bold;"></span>
-          <input id="entrada" type="text" value="" onkeypress="procesarEntrada(event);">
+          <input id="entrada" type="text" value="" onkeydown="navegar(event)" onkeypress="procesarEntrada(event);">
         </div>
       </div>
     </div>
@@ -94,6 +94,7 @@
   </footer>
 </body>
 
+<script src="scripts/computadores.js"></script>
 <script src="scripts/emulador.js"></script>
 
 </html>
