@@ -79,7 +79,7 @@ function procesarEntrada(e) {
         } else {
             login(document.getElementById("entrada").value.trim())
         }
-    } 
+    }
 }
 
 function navegar(e) {
@@ -114,21 +114,22 @@ function procesarComando(entrada_) {
     addConsola(prompt + entrada_.value)
 
     switch (comando) {
-        case 'clear':   comandoClear(parametros);   break;
-        case 'sudo':    sudo(parametros);           break;
-        case 'ls':      ls(parametros);             break;
-        case 'cat':     cat(parametros);            break;
-        case 'rm':      rm(parametros);             break;
-        case 'nano':    nano(parametros);           break;
-        case 'lsgroup': lsgroup(parametros);        break;
-        case 'hostname':comandoHostname(parametros);break;
-        case 'logout':  logout(parametros);         break;
-        case 'exit':    logout(parametros);         break;
-        case 'chmod': chmod(parametros);            break;
-        case 'touch': touch(parametros);            break;
+        case 'clear': comandoClear(parametros); break;
+        case 'sudo': sudo(parametros); break;
+        case 'ls': ls(parametros); break;
+        case 'cat': cat(parametros); break;
+        case 'rm': rm(parametros); break;
+        case 'nano': nano(parametros); break;
+        case 'lsgroup': lsgroup(parametros); break;
+        case 'hostname': comandoHostname(parametros); break;
+        case 'logout': logout(parametros); break;
+        case 'exit': logout(parametros); break;
+        case 'chmod': chmod(parametros); break;
+        case 'touch': touch(parametros); break;
+        case 'ssh': ssh(parametros); break;
         // ...
-        default:   
-            if(comando[0] == "."){
+        default:
+            if (comando[0] == ".") {
                 ejecutar(comando)
             } else {
                 addConsola(shell + ": comando no reconocido: " + comando)
@@ -202,7 +203,7 @@ function lsgroup(parametros) {
                 var grupo = obtenerGrupo(nombreGrupo)
                 if (grupo) {
                     addConsola(nombreGrupo + ": (" + grupo.usuarios + ")")
-                } else { 
+                } else {
                     addConsola("lsgroup: grupo invalido '" + nombreGrupo + "'")
                 }
             }
@@ -211,7 +212,7 @@ function lsgroup(parametros) {
 }
 
 /**
- * Muestra el hostname y la diraccion IP
+ * Muestra el hostname y la direccion IP
  * @param {string[]} parametros Parametros del comando hostname
  */
 function comandoHostname(parametros) {
@@ -422,12 +423,48 @@ function touch(parametros) {
 }
 
 /**
+ * Intenta conectarse a una maquina remota
+ * @param {string} parametros Parametros del comando ssh 
+ */
+function ssh(parametros) {
+
+    if (parametros.length > 1) {
+        addConsola("ssh: too many arguments")
+    }
+    if (parametros.length == 0) {
+        addConsola("usage: ssh usuario@ip")
+
+    } else  {
+        var nombre = parametros[0].split("@")[0]
+        var ip = parametros[0].split("@")[1]
+        var comp = obtenerComputador(ip)
+
+        if (comp != null) {
+
+            for (const i in comp.usuarios) {
+                if (comp.usuarios[i] == nombre) {
+                    hostname.push(comp.hostname)
+                    computador = comp
+                    login(nombre)
+                    return false
+                }
+            }
+            addConsola(parametros[0] + ": Permission denied (publickey,password).")
+
+        } else {
+            addConsola("ssh: connect to host " + parametros[0].split("@")[0] +
+                " port 22: No route to host")
+        }
+    }
+}
+
+/**
  * Procesa el comando (cat)
  * Intenta leer el contenido de un archivo
  * @param {string[]} parametros la lista de archivos
  */
 function cat(parametros) {
-    if(parametros.length == 0){
+    if (parametros.length == 0) {
         addConsola("cat: falta un archivo como argumento")
         return false;
     }
@@ -595,9 +632,9 @@ function chmod(parametros) {
         return false
     }
     var permisos = crearPermisos(parametros[0]);
-        
-    if(permisos == null){
-        addConsola("chmod: modo invalido <<" + parametros[0] + ">>" )
+
+    if (permisos == null) {
+        addConsola("chmod: modo invalido <<" + parametros[0] + ">>")
         return false
     }
 
@@ -612,30 +649,30 @@ function chmod(parametros) {
     }
 }
 
-function crearPermisos(permisos){
+function crearPermisos(permisos) {
     var aux = "-";
-    if(permisos.length > 3){
+    if (permisos.length > 3) {
         return null
     }
-    for(let i = 0; i< 3; i++){
-        var valor = parseInt(permisos[i]) 
-        if(valor > 7){
+    for (let i = 0; i < 3; i++) {
+        var valor = parseInt(permisos[i])
+        if (valor > 7) {
             return null
         }
-        if(valor >= 4){
+        if (valor >= 4) {
             aux += "r"
             valor -= 4
-        }else{ aux += "-"}
+        } else { aux += "-" }
 
-        if(valor >= 2){
+        if (valor >= 2) {
             aux += "w"
             valor -= 2
-        }else{ aux += "-"}
+        } else { aux += "-" }
 
-        if(valor >= 1){
+        if (valor >= 1) {
             aux += "x"
             valor -= 1
-        }else{ aux += "-"}
+        } else { aux += "-" }
     }
     return aux
 }
@@ -643,11 +680,11 @@ function crearPermisos(permisos){
  * ejecuta un archivo con ./
  * @param {String} comando el archivo a ejecutar
  */
-function ejecutar(comando){
-    if(comando[1] == "/"){
-        if(comando.length ==2){
+function ejecutar(comando) {
+    if (comando[1] == "/") {
+        if (comando.length == 2) {
             addConsola("bash: ./: Es un directorio")
-        }else{
+        } else {
             var archivo = obtenerArchivo(comando.slice(2))
             if (archivo == null) {
                 addConsola("bash: " + comando + ": No existe el archivo o directorio");
@@ -659,7 +696,7 @@ function ejecutar(comando){
                 addConsola("bash: " + comando + ": Permiso denegado")
             }
         }
-    }else{
+    } else {
         addConsola(".: modo de empleo: nombre de archivo [argumentos]")
     }
 }
