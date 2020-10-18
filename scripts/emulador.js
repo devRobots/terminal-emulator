@@ -127,6 +127,8 @@ function procesarComando(entrada_) {
         case 'chmod': chmod(parametros); break;
         case 'touch': touch(parametros); break;
         case 'ssh': ssh(parametros); break;
+        case 'scp': scp(parametros); break;
+        case '':  break;
         // ...
         default:
             if (comando[0] == ".") {
@@ -628,13 +630,17 @@ function obtenerComputador(host) {
  */
 function chmod(parametros) {
     if (parametros.length == 0) {
-        addConsola("chmod: falta un archivo como argumento")
+        addConsola("chmod: falta un operando")
+        return false
+    }
+    if(parametros.length < 2){
+        addConsola("chmod: falta un operando despues de «" + parametros[0] + "»")
         return false
     }
     var permisos = crearPermisos(parametros[0]);
 
-    if (permisos == null) {
-        addConsola("chmod: modo invalido <<" + parametros[0] + ">>")
+    if( !parseInt(parametros[0]) || permisos == null){
+        addConsola("chmod: modo invalido «" + parametros[0] + "»")
         return false
     }
 
@@ -642,7 +648,7 @@ function chmod(parametros) {
     for (const i in subparametros) {
         const archivo = obtenerArchivo(subparametros[i])
         if (archivo == null) {
-            addConsola("chmod: " + subparametros[i] + ": No existe el archivo o directorio");
+            addConsola("chmod: no se puede acceder a '" + subparametros[i] + "': No existe el archivo o directorio");
             return false;
         }
         archivo.permisos = permisos
@@ -691,12 +697,137 @@ function ejecutar(comando) {
                 return false;
             }
             if (verificarPermisosEjecucion(archivo)) {
-                addConsola("“Ejecutando en el archivo ....")
+                addConsola("Ejecutando en el archivo ....")
             } else {
                 addConsola("bash: " + comando + ": Permiso denegado")
             }
         }
     } else {
         addConsola(".: modo de empleo: nombre de archivo [argumentos]")
+    }
+}
+
+/**
+ * Ejecuta el comando (scp)
+ * Intenta Copiar archivos entre máquinas
+ * @param {String[]} parametros 
+ */
+function scp(parametros){
+    console.log(parametros.length)
+    console.log(parametros)
+    //pasar archivo
+    if(parametros.length == 2){
+        if(obtenerArchivo(parametros[0]) != null){
+            var archivo = obtenerArchivo(parametros[0])
+            if(!verificarPermisosLectura(archivo)){
+                addConsola("permiso denegado")
+                return false
+            }
+            var subparametros = parametros[1].split(":")
+            if(subparametros.length == 2){
+                var nombre = subparametros[0].split("@")[0]
+                var ip = subparametros[0].split("@")[1]
+                var comp = obtenerComputador(ip)
+                if (comp != null) {
+                    const usuarios = comp.usuarios
+                    for (const i in usuarios) {
+                        if (usuarios.hasOwnProperty(i)) {
+                            const u = usuarios[i]
+                            if (u == nombre) {
+                                if(subparametros[1] == "."){
+                                    var nuevo = {
+                                        "nombre": archivo.nombre, "duenio": u.nombre, "grupo": u.nombre,
+                                        "fecha": "oct 09 2020 22:54:00", "permisos": archivo.permisos
+                                    }
+                                    comp.disco.push(nuevo)
+                                    addConsola("envio exitoso, cambiar despues")
+                                    console.log(comp.disco)
+                                } else{
+                                    const disco = comp.disco
+                                    for (const i in disco) {
+                                        if (disco.hasOwnProperty(i)) {
+                                            const a = disco[i]
+                                            if (a.nombre == subparametros[1]) {
+                                                if(verificarPermisosEscritura(a)){
+                                                    a.fecha = "oct 09 2020 22:54:00"
+                                                    a.permisos = archivo.permisos
+                                                }else{
+                                                 addConsola("permiso denegado")   
+                                                }
+                                            }
+                                        }
+                                    }
+                                    addConsola("No such file or directory")
+                                    return false
+                                }
+                            }
+                        }
+                    }
+                    addConsola(parametros[0] + "ssh: Could not resolve hostname [nombre ingresado]: Name or service not known lost connection")
+                    return false
+                } else {
+                    addConsola("ssh: connect to host " + parametros[0].split("@")[0] +
+                        " port 22: No route to host")
+                }
+            }else{
+                addConsola("usage: agregar algo")
+                return false;
+            }
+        //obtener archivo
+        }else{
+            var subparametros = parametros[0].split(":")
+            if(subparametros.length == 2){
+                var nombre = subparametros[0].split("@")[0]
+                var ip = subparametros[0].split("@")[1]
+                var comp = obtenerComputador(ip)
+                var nombreArchivo = subparametros[1]
+                
+                if (comp != null) {
+                    if(comp.usuarios.includes(nombre)){
+                        var aux = usuario
+                        usuario = nombre
+                        var compu = computador
+                        computador = comp
+                        var file = obtenerArchivo(nombreArchivo)
+                        if(file == null){
+                            usuario = aux
+                            computador = compu
+                            addConsola("no existe archivo")
+                            return false
+                        }
+                        if(verificarPermisosEscritura(file)){
+                            usuario = aux
+                            computador = compu
+                            if(parametros[1] == "."){
+                                touch([nombreArchivo])
+                            }
+                            else{
+                                touch([parametros[1]])
+                            }
+                            addConsola("envio exitoso, cambiar despues")
+                            console.log(computador.disco)
+                            return true
+                        } else{
+                            usuario = aux
+                            computador = compu
+                            addConsola("No permisos")
+                            return false
+                        }                        
+                    }else{
+                        addConsola(parametros[0] + "ssh: Could not resolve hostname [nombre ingresado]: Name or service not known lost connection")
+                        return false
+                    }
+                } else {
+                    addConsola("ssh: connect to host " + parametros[0].split("@")[0] +
+                        " port 22: No route to host")
+                }
+            }else{
+                addConsola("usage: agregar algo")
+                return false;
+            }
+        }
+    }else{
+        addConsola("usage: agregar algo")
+        return false;
     }
 }

@@ -109,12 +109,14 @@ const computadores = [
             {
                 "nombre": "correccion.txt",
                 "duenio": "root",
+                "grupo": "profesores",
                 "fecha": "nov 25  2019 22:54:00",
                 "permisos": "-rw-r-----"
             },
             {
                 "nombre": "proyecto.zip",
-                "duenio": "profesores",
+                "duenio": "andres",
+                "grupo": "profesores",
                 "fecha": "ago 30  2019 22:54:00",
                 "permisos": "-rw-r-----"
             }
