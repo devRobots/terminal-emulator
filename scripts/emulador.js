@@ -638,8 +638,7 @@ function chmod(parametros) {
         return false
     }
     var permisos = crearPermisos(parametros[0]);
-
-    if( !parseInt(parametros[0]) || permisos == null){
+    if( parametros[0].match(/^\d+$/) == null || permisos == null){
         addConsola("chmod: modo invalido «" + parametros[0] + "»")
         return false
     }
@@ -713,64 +712,59 @@ function ejecutar(comando) {
  * @param {String[]} parametros 
  */
 function scp(parametros){
-    console.log(parametros.length)
-    console.log(parametros)
     //pasar archivo
     if(parametros.length == 2){
         if(obtenerArchivo(parametros[0]) != null){
             var archivo = obtenerArchivo(parametros[0])
-            if(!verificarPermisosLectura(archivo)){
-                addConsola("permiso denegado")
-                return false
-            }
             var subparametros = parametros[1].split(":")
             if(subparametros.length == 2){
                 var nombre = subparametros[0].split("@")[0]
                 var ip = subparametros[0].split("@")[1]
                 var comp = obtenerComputador(ip)
+                var aux = usuario
+                var compu = computador
+
+                if(!verificarPermisosLectura(archivo)){
+                    addConsola(parametros[0]+": permiso denegado")
+                    return false
+                }
+
                 if (comp != null) {
-                    const usuarios = comp.usuarios
-                    for (const i in usuarios) {
-                        if (usuarios.hasOwnProperty(i)) {
-                            const u = usuarios[i]
-                            if (u == nombre) {
-                                if(subparametros[1] == "."){
-                                    var nuevo = {
-                                        "nombre": archivo.nombre, "duenio": u.nombre, "grupo": u.nombre,
-                                        "fecha": "oct 09 2020 22:54:00", "permisos": archivo.permisos
-                                    }
-                                    comp.disco.push(nuevo)
-                                    addConsola("envio exitoso, cambiar despues")
-                                    console.log(comp.disco)
-                                } else{
-                                    const disco = comp.disco
-                                    for (const i in disco) {
-                                        if (disco.hasOwnProperty(i)) {
-                                            const a = disco[i]
-                                            if (a.nombre == subparametros[1]) {
-                                                if(verificarPermisosEscritura(a)){
-                                                    a.fecha = "oct 09 2020 22:54:00"
-                                                    a.permisos = archivo.permisos
-                                                }else{
-                                                 addConsola("permiso denegado")   
-                                                }
-                                            }
-                                        }
-                                    }
-                                    addConsola("No such file or directory")
+                    if(comp.usuarios.includes(nombre)){
+                        usuario = nombre
+                        computador = comp
+                        if(subparametros[1] == "."){
+                            touch([archivo.nombre])
+                        } else{
+                            var file = obtenerArchivo(subparametros[1])
+                            if(file != null){
+                                if(verificarPermisosEscritura(file)){
+                                    touch[subparametros[1]]
+                                }else{
+                                    usuario = aux
+                                    computador = compu
+                                    addConsola(file.nombre +": permiso denegado")
                                     return false
                                 }
+                            }else{
+                                touch([subparametros[1]])
                             }
                         }
-                    }
-                    addConsola(parametros[0] + "ssh: Could not resolve hostname [nombre ingresado]: Name or service not known lost connection")
+                        usuario = aux
+                        computador = compu
+                        addConsola(archivo.nombre + "                 100%   0.7KB/s  00:00")
+                    }else{
+                    addConsola("ssh: Could not resolve hostname '" +parametros[1]+ "': Name or service not known lost connection")
                     return false
+                    }
                 } else {
-                    addConsola("ssh: connect to host " + parametros[0].split("@")[0] +
-                        " port 22: No route to host")
+                    addConsola("ssh: connect to host " + ip +
+                    " port 22: No route to host")
+                    return false
                 }
             }else{
-                addConsola("usage: agregar algo")
+                addConsola("usage: scp usuario@id:archivo [archivoDestino o directorio]")
+                addConsola("\t scp archivo usuario@id:[archivoDestino o directorio]")
                 return false;
             }
         //obtener archivo
@@ -781,18 +775,18 @@ function scp(parametros){
                 var ip = subparametros[0].split("@")[1]
                 var comp = obtenerComputador(ip)
                 var nombreArchivo = subparametros[1]
+                var aux = usuario
+                var compu = computador
                 
                 if (comp != null) {
                     if(comp.usuarios.includes(nombre)){
-                        var aux = usuario
                         usuario = nombre
-                        var compu = computador
                         computador = comp
                         var file = obtenerArchivo(nombreArchivo)
                         if(file == null){
                             usuario = aux
                             computador = compu
-                            addConsola("no existe archivo")
+                            addConsola(parametros[1] + "no existe el archivo o directorio")
                             return false
                         }
                         if(verificarPermisosEscritura(file)){
@@ -804,30 +798,33 @@ function scp(parametros){
                             else{
                                 touch([parametros[1]])
                             }
-                            addConsola("envio exitoso, cambiar despues")
+                            addConsola(nombreArchivo + "                 100%   0.7KB/s  00:00")
                             console.log(computador.disco)
                             return true
                         } else{
                             usuario = aux
                             computador = compu
-                            addConsola("No permisos")
+                            addConsola("scp: " + nombreArchivo +": Permiso Denegado")
                             return false
-                        }                        
+                        }
+                                            
                     }else{
-                        addConsola(parametros[0] + "ssh: Could not resolve hostname [nombre ingresado]: Name or service not known lost connection")
-                        return false
+                        addConsola("ssh: Could not resolve hostname '" + parametros[0]+ "': Name or service not known lost connection")
+                    return false
                     }
                 } else {
-                    addConsola("ssh: connect to host " + parametros[0].split("@")[0] +
+                    addConsola("ssh: connect to host " + id +
                         " port 22: No route to host")
                 }
             }else{
-                addConsola("usage: agregar algo")
+                addConsola("usage: scp usuario@id:archivo [archivoDestino o directorio]")
+                addConsola("\t scp archivo usuario@id:[archivoDestino o directorio]")
                 return false;
             }
         }
     }else{
-        addConsola("usage: agregar algo")
+        addConsola("usage: scp usuario@id:archivo [archivoDestino o directorio]")
+        addConsola("\t scp archivo usuario@id:[archivoDestino o directorio]")
         return false;
     }
 }
