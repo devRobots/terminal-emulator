@@ -35,7 +35,7 @@ const computadores = [
         "usuarios": [
             "luisa",
             "joshua",
-            "yes",
+            "yesid",
             "cristian",
             "root"
         ],

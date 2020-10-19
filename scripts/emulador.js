@@ -758,11 +758,11 @@ function scp(parametros){
                     return false
                     }
                 } else {
-                    addConsola("ssh: connect to host " + ip +
+                    addConsola("ssh: connect to host " + parametros[1] +
                     " port 22: No route to host")
                     return false
                 }
-            }else{
+            }else {
                 addConsola("usage: scp usuario@id:archivo [archivoDestino o directorio]")
                 addConsola("\t scp archivo usuario@id:[archivoDestino o directorio]")
                 return false;
@@ -786,7 +786,7 @@ function scp(parametros){
                         if(file == null){
                             usuario = aux
                             computador = compu
-                            addConsola(parametros[1] + ": no existe el archivo o directorio")
+                            addConsola(nombreArchivo + ": no existe el archivo o directorio")
                             return false
                         }
                         if(verificarPermisosLectura(file)){
@@ -823,9 +823,13 @@ function scp(parametros){
                     return false
                     }
                 } else {
-                    addConsola("ssh: connect to host " + id +
+                    addConsola("ssh: connect to host " + parametros[0] +
                         " port 22: No route to host")
                 }
+            }
+            else if(subparametros.length <= 1){
+                addConsola(parametros[0] + ": archivo o directorio no existe")
+                return false
             }else{
                 addConsola("usage: scp usuario@id:archivo [archivoDestino o directorio]")
                 addConsola("\t scp archivo usuario@id:[archivoDestino o directorio]")
