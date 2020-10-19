@@ -786,17 +786,27 @@ function scp(parametros){
                         if(file == null){
                             usuario = aux
                             computador = compu
-                            addConsola(parametros[1] + "no existe el archivo o directorio")
+                            addConsola(parametros[1] + ": no existe el archivo o directorio")
                             return false
                         }
-                        if(verificarPermisosEscritura(file)){
+                        if(verificarPermisosLectura(file)){
                             usuario = aux
                             computador = compu
                             if(parametros[1] == "."){
                                 touch([nombreArchivo])
                             }
                             else{
-                                touch([parametros[1]])
+                                var nuevo = obtenerArchivo(parametros[1])
+                                if(nuevo != null){
+                                    if(verificarPermisosEscritura(nuevo)){
+                                        touch([nuevo.nombre])                                        
+                                    }else{
+                                        addConsola(nuevo.nombre +": permiso denegado")
+                                        return false
+                                    }
+                                }else{
+                                    touch([parametros[1]])
+                                }
                             }
                             addConsola(nombreArchivo + "                 100%   0.7KB/s  00:00")
                             console.log(computador.disco)
